@@ -1,0 +1,35 @@
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 15px;
+  padding: 20px 20px 16px;
+}
+
+.content ul>li {
+  float: left;
+  width: calc(50% - 42px);
+  padding: 18px 20px;
+}
+.content ul>li:nth-of-type(odd) {
+  border-top: 1px solid #B8C2D8;
+  border-right: 1px solid #B8C2D8;
+}
+.content ul>li:nth-of-type(even) {
+  border-top: 1px solid #B8C2D8;
+}
+
+.content-list-d1 {
+  font-size: 14px;
+  color: #4A4A4A;
+  margin-bottom: 4px;
+}
+.content-list-d1>span {
+  margin-left: 6px;
+  color: #B3B9CD;
+}
+
+.content-list-d2 {
+  font-size: 20px;
+}

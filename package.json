@@ -1,0 +1,58 @@
+{
+  "name": "data2charts",
+  "version": "0.0.1",
+  "description": "二维数组数据转换echarts",
+  "main": "lib/index.js",
+  "files": [
+    "build",
+    "example",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lydxwj/react-cmp.git"
+  },
+  "homepage": "https://github.com/lydxwj/react-cmp",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3000 --hot",
+    "pub": "webpack --config ./build/webpack.pub.config.js",
+    "prepublish": "npm run pub"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "react-cmp"
+  ],
+  "author": "lyd",
+  "license": "MIT",
+  "dependencies": {
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1"
+  },
+  "devDependencies": {
+    "antd-mobile": "^2.2.5",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-import": "^1.6.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.17",
+    "css-loader": "^0.28.7",
+    "echarts": "^4.2.0-rc.1",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.5",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.6.0",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "react-css-modules": "^4.7.7",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  }
+}
