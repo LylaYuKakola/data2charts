@@ -1,6 +1,6 @@
 {
   "name": "data2charts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "二维数组数据转换echarts",
   "main": "lib/index.js",
   "files": [
@@ -10,12 +10,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lydxwj/react-cmp.git"
+    "url": "git+https://github.com/LylaYuKakola/data2charts"
   },
-  "homepage": "https://github.com/lydxwj/react-cmp",
+  "homepage": "https://github.com/LylaYuKakola/data2charts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3000 --hot",
+    "start": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3000 --hot",
     "pub": "webpack --config ./build/webpack.pub.config.js",
     "prepublish": "npm run pub"
   },

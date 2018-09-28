@@ -1,23 +1,3 @@
-# react-cmp
+# data2charts
 
-- 初始化开发一个react的组件
-
-- 使用
-
-  #### 安装依赖
-
-  - ```
-    npm install
-    ```
-
-  #### 开发测试
-
-  - ```
-    npm run dev
-    ```
-
-  #### 发布打包
-
-  - ```
-    npm run pub
-    ```
+就一个根据业务api的ECharts的react组件的简单二次封装
