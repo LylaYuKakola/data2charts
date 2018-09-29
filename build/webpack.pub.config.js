@@ -23,7 +23,7 @@ module.exports = {
         warnings: false // 移除警告
       }
     }),
-    new ExtractTextPlugin("css/styles.css"), // 抽取CSS文件
+    new ExtractTextPlugin("styles.css"), // 抽取CSS文件
     new OptimizeCssAssetsPlugin()// 压缩CSS的插件
   ],
   module: {

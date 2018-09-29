@@ -1,10 +1,11 @@
 {
   "name": "data2charts",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "二维数组数据转换echarts",
   "main": "lib/index.js",
   "files": [
     "build",
+    "lib",
     "example",
     "src"
   ],
@@ -22,7 +23,8 @@
   "keywords": [
     "react",
     "component",
-    "react-cmp"
+    "react-cmp",
+    "echarts"
   ],
   "author": "lyd",
   "license": "MIT",
