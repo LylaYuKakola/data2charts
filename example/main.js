@@ -57,28 +57,21 @@ const data = [
 const testChart1 = {
   data,
   chartType: 'line',
-  xOrY: 'x',
 }
 
 const testChart2 = {
   data,
-  chartType: 'line',
   title: 'line图',
-  xOrY: 'y',
 }
 
 const testChart3 = {
   data,
-  chartType: 'bar',
   title: 'bar默认',
-  xOrY: 'x',
 }
 
 const testChart4 = {
   data,
-  chartType: 'bar',
   title: 'bar分组',
-  xOrY: 'y',
 }
 
 const testChartForPie = {
@@ -89,7 +82,6 @@ const testChartForPie = {
 
 const testChartForSum = {
   data: [[100000]],
-  chartType: 'numeric',
   title: 'numeric',
   description: '描述一下子',
 }
@@ -102,10 +94,12 @@ ReactDOM.render(<div>
   />
   <p>x轴为基准line默认配置</p>
   <Chart
+    chartType="line"
     chart={testChart1}
   />
   <p>x轴为基准line增加DimColumns配置</p>
   <Chart
+    chartType="line"
     chart={testChart1}
     xColumn={0}
     yColumn={3}
@@ -113,10 +107,14 @@ ReactDOM.render(<div>
   />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
+    chartType="line"
+    xOrY="y"
     chart={testChart2}
   />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
+    chartType="line"
+    xOrY="y"
     chart={testChart2}
     xColumn={3}
     yColumn={0}
@@ -124,10 +122,13 @@ ReactDOM.render(<div>
   />
   <p>x轴为基准bar默认配置(默认排序)</p>
   <Chart
+    chartType="bar"
     chart={testChart3}
   />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
+    chartType="bar"
+    xOrY="y"
     chart={testChart4}
     xColumn={3}
     yColumn={0}
@@ -135,11 +136,13 @@ ReactDOM.render(<div>
   />
   <p>饼图</p>
   <Chart
+    chartType="pie"
     chart={testChartForPie}
     xColumn={0}
     yColumn={3}
   />
   <Chart
+    chartType="numeric"
     chart={testChartForSum}
   />
 </div>, document.getElementById('app'))

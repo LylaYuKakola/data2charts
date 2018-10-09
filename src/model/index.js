@@ -7,7 +7,7 @@
 
 import provinces from '../files/provinces.json'
 
-export function getChartData(chart, xColumn, yColumn, dimColumns) {
+export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns) {
   /** ******************* chart对象需要满足以下几个属性 ****************** */
   /* 1. data（必要）二维数组 table数据格式 包含chart所需要的数据           */
   /* 2. chartType（必要）图表类型                                       */
@@ -21,15 +21,15 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
   /** ***************************************************************** */
   const {
     data,
-    chartType,
     title,
     location,
     specialAxis,
     description,
     defaultDimName,
     specialScaleArr,
-    xOrY,
-  } = { title: '', description: '', defaultDimName: '', xOrY: 'x', ...chart }
+  } = { title: '', description: '', defaultDimName: '', ...chart }
+
+  xOrY = xOrY || 'x'
 
   // numeric 只显示值
   if (chartType === 'numeric') {

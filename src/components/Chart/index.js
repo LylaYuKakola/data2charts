@@ -30,19 +30,23 @@ class Chart extends React.PureComponent {
     super(props)
     this.state = {
       drawerVisible: false,
+      chartType: props.chartType,
       chart: props.chart || {},
       xColumn: props.xColumn,
       yColumn: props.yColumn,
       DimColumns: props.DimColumns,
+      xOrY: props.xOrY,
     }
   }
 
   componentWillReceiveProps(changes) {
     this.setState({
       chart: changes.chart,
+      chartType: changes.chartType,
       xColumn: changes.xColumn,
       yColumn: changes.yColumn,
       DimColumns: changes.DimColumns,
+      xOrY: changes.xOrY,
     })
   }
 
@@ -61,9 +65,8 @@ class Chart extends React.PureComponent {
   };
 
   render() {
-    const { chart, xColumn, yColumn, DimColumns } = this.state
-    const { chartType } = chart
-    const chartData = getChartData(chart, xColumn, yColumn, DimColumns)
+    const { chart, chartType, xOrY, xColumn, yColumn, DimColumns } = this.state
+    const chartData = getChartData(chart, chartType, xOrY, xColumn, yColumn, DimColumns)
 
     const id = `chart-container-${(Math.random() * 1000).toFixed()}`
 
