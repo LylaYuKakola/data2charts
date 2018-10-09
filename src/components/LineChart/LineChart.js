@@ -19,9 +19,70 @@ class LineChart extends React.PureComponent {
     lengendNotSelected.forEach(item => {
       notSelected[item] = false
     })
+    
+    const {
+      title,
+      legendData,
+      baseAxisData,
+      valueAxisData,
+      sourceData,
+      xOrY,
+    } = data
+    
+    // 根据data构造坐标轴配置
+    const baseAxis = {
+      type: 'category',
+      data: baseAxisData,
+    }
+    let valueAxis = {
+      type: 'value',
+      nameTextStyle: {
+        width: 20,
+      },
+      axisTick: {
+        length: 2,
+      },
+      axisLabel: {
+        margin: 1,
+        fontSize: 10,
+        formatter: value => {
+          let vl = ''
+          if (value >= 1000000000) {
+            vl = `${value / 1000000000}B`
+          } else if (value >= 1000000) {
+            vl = `${value / 1000000}M`
+          } else if (value >= 1000) {
+            vl = `${value / 1000}K`
+          } else {
+            vl = `${value}`
+          }
+          return vl
+        },
+      },
+    }
+    if (valueAxisData && valueAxisData.length) {
+      valueAxis = valueAxisData.map((item, index) => ({
+        ...valueAxis,
+        name: item,
+        nameTextStyle: {
+          color: index === 0 ? '#ff6700' : '#fcce10',
+        },
+      }))
+      // option.series[1].yAxisIndex = 1
+    }
+    
+    let xAxis, yAxis
+    if (xOrY === 'x') {
+      xAxis = baseAxis
+      yAxis = valueAxis
+    } else {
+      yAxis = baseAxis
+      xAxis = valueAxis
+    }
+    
     const option = {
       title: {
-        text: data.title,
+        text: title,
         padding: [4, 0],
         textStyle: {
           fontWeight: 'normal',
@@ -37,54 +98,17 @@ class LineChart extends React.PureComponent {
         top: '12',
         animation: true,
         pageIconSize: [20, 20],
-        data: data.legendData,
+        data: legendData,
         selected: notSelected,
       },
-      xAxis: {
-        data: data.xAxisData,
-      },
-      yAxis: {
-        type: 'value',
-        nameTextStyle: {
-          width: 20,
-        },
-        axisTick: {
-          length: 2,
-        },
-        axisLabel: {
-          margin: 1,
-          fontSize: 10,
-          formatter: value => {
-            let vl = ''
-            if (value >= 1000000000) {
-              vl = `${value / 1000000000}B`
-            } else if (value >= 1000000) {
-              vl = `${value / 1000000}M`
-            } else if (value >= 1000) {
-              vl = `${value / 1000}K`
-            } else {
-              vl = `${value}`
-            }
-            return vl
-          },
-        },
-      },
-      series: data.sourceData.map(item => (
+      xAxis,
+      yAxis,
+      series: sourceData.map(item => (
         {
           ...item,
           type: 'line',
         }
       )),
-    }
-    if (data.yAxisData && data.yAxisData.length > 0) { // 双轴折线图
-      option.yAxis = data.yAxisData.map((item, index) => ({
-        ...option.yAxis,
-        name: item,
-        nameTextStyle: {
-          color: index === 0 ? '#ff6700' : '#fcce10',
-        },
-      }))
-      // option.series[1].yAxisIndex = 1
     }
     myChart.setOption(option, true)
     this.myChart = myChart
@@ -104,3 +128,9 @@ class LineChart extends React.PureComponent {
 }
 
 export default CSSModules(LineChart, styles)
+
+/**
+ * 2018/10/9 Changed By yurt
+ * 1. 去掉之前的xAxis和yAxis的配置，方便切换横纵坐标轴
+ * 2. 增加baseAxis和xOry的配置
+ */

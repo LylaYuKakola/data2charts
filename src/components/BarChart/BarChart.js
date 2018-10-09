@@ -46,10 +46,62 @@ class BarChart extends React.PureComponent {
     let myChart = echarts.init(dom, 'chongming') // eslint-disable-line
     const data = this.state.data
     const unit = '(B:十亿 M:百万 K:千)'
+  
+    const {
+      title,
+      legendData,
+      baseAxisData,
+      sourceData,
+      subTitle,
+      xOrY,
+      tooltip,
+      grid,
+    } = data
+  
+    const baseAxis = {
+      type: 'category',
+      data: baseAxisData,
+      axisLabel: {
+        margin: 4,
+        textStyle: {
+          color(value) {
+            return value === '总量' ? '#ff6700' : '#9B9B9B'
+          },
+        },
+      },
+    }
+    const valueAxis = {
+      type: 'value',
+      axisLabel: {
+        formatter: value => {
+          let vl = ''
+          if (value >= 1000000000) {
+            vl = `${value / 1000000000}B`
+          } else if (value >= 1000000) {
+            vl = `${value / 1000000}M`
+          } else if (value >= 1000) {
+            vl = `${value / 1000}K`
+          } else {
+            vl = `${value}`
+          }
+          return vl
+        },
+      },
+    }
+  
+    let xAxis, yAxis
+    if (xOrY === 'x') {
+      xAxis = baseAxis
+      yAxis = valueAxis
+    } else {
+      yAxis = baseAxis
+      xAxis = valueAxis
+    }
+    
     const option = {
       title: {
-        text: data.title,
-        subtext: data.subTitle,
+        text: title,
+        subtext: subTitle || '',
         padding: [4, 0],
         textStyle: {
           fontWeight: 'normal',
@@ -83,8 +135,8 @@ class BarChart extends React.PureComponent {
         axisPointer: { // 坐标轴指示器，坐标轴触发有效
           type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
         },
-        formatter: data.tooltip && data.tooltip.formatter === 'multi'
-          ? thisData => data.sourceData[thisData[0].dataIndex][3]
+        formatter: tooltip && tooltip.formatter === 'multi'
+          ? thisData => sourceData[thisData[0].dataIndex][3]
           : params => {
             let sum = 0
             params.forEach(param => {
@@ -104,47 +156,20 @@ class BarChart extends React.PureComponent {
             }).join('<br/>')
           },
       },
-      grid: data.grid,
-      xAxis: {
-        type: 'value',
-        axisLabel: {
-          formatter: value => {
-            let vl = ''
-            if (value >= 1000000000) {
-              vl = `${value / 1000000000}B`
-            } else if (value >= 1000000) {
-              vl = `${value / 1000000}M`
-            } else if (value >= 1000) {
-              vl = `${value / 1000}K`
-            } else {
-              vl = `${value}`
-            }
-            return vl
-          },
-        },
-      },
-      yAxis: {
-        data: data.yAxisData,
-        axisLabel: {
-          margin: 4,
-          textStyle: {
-            color(value) {
-              return value === '总量' ? '#ff6700' : '#9B9B9B'
-            },
-          },
-        },
-      },
+      grid: grid,
+      xAxis,
+      yAxis,
       series: [],
     }
-    if (data.legendData && data.legendData.length > 0) {
+    if (legendData && legendData.length > 0) {
       option.legend = {
         type: 'scroll',
         top: '20',
         animation: true,
         pageIconSize: [20, 20],
-        data: data.legendData,
+        data: legendData,
       }
-      option.series = data.sourceData.map(item => (
+      option.series = sourceData.map(item => (
         {
           ...item,
           type: 'bar',
@@ -152,11 +177,11 @@ class BarChart extends React.PureComponent {
         }
       ))
     } else { // 兼容旧的格式
-      option.series = data.sourceData[0] instanceof Array
+      option.series = sourceData[0] instanceof Array
         ? [{
           type: 'bar',
           barMaxWidth: 40,
-          data: data.sourceData.map(item => item[0]),
+          data: sourceData.map(item => item[0]),
           itemStyle: {
             normal: {
               color(param) {
@@ -168,7 +193,7 @@ class BarChart extends React.PureComponent {
             normal: {
               show: true,
               position: 'right',
-              formatter: thisData => data.sourceData[thisData.dataIndex][2],
+              formatter: thisData => sourceData[thisData.dataIndex][2],
             },
           },
         }]
@@ -182,7 +207,7 @@ class BarChart extends React.PureComponent {
             },
           },
           barMaxWidth: 40,
-          data: data.sourceData,
+          data: sourceData,
         }]
     }
     myChart.setOption(option, true)
@@ -196,3 +221,9 @@ class BarChart extends React.PureComponent {
 }
 
 export default CSSModules(BarChart, styles)
+
+/**
+ * 2018/10/9 Changed By yurt
+ * 1. 去掉之前的xAxis和yAxis的配置，方便切换横纵坐标轴
+ * 2. 增加baseAxis和xOry的配置
+ */

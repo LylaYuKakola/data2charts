@@ -40,7 +40,7 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
     defaultDimName,
     specialScaleArr,
     xOrY,
-  } = {...chart, title: '', description: '', defaultDimName: '', xOrY: 'x'}
+  } = { title: '', description: '', defaultDimName: '', xOrY: 'x', ...chart }
   
   // numeric 只显示值
   if (chartType === 'numeric') {
@@ -85,8 +85,12 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
     }
     dimColumns = []
   } else {
-    xColumn = xColumn || 0
-    yColumn = yColumn || data[0].length - 1
+    xColumn = (xColumn || xColumn === 0) ?
+      xColumn :
+      (xOrY === 'x' ? 0 : data[0].length - 1)
+    yColumn = (yColumn || yColumn === 0) ?
+      yColumn :
+      (xOrY !== 'x' ? 0 : data[0].length - 1)
     dimColumns = (!dimColumns || !(dimColumns instanceof Array)) ? [] : dimColumns
   }
   
@@ -122,7 +126,6 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
       dataMap.set(keyInRow, valueInRow + (dataMap.get(keyInRow) || 0))
       baseLineArr.add(yColumnValue)
     }
-    
     // 顺便构造维度数组
     dimColumns.forEach((_val, _index) => {
       if (!dimValues[_index]) dimValues[_index] = new Set()
@@ -168,28 +171,28 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
   
   if (chartType === 'line') {
     const legendData = dims
-    const xAxisData = baseLineArr
+    const baseAxisData = baseLineArr
     
     // 是否为特殊的y轴
     if (specialScaleArr) {
-      const yAxisData = specialScaleArr
-      const [yAxisData0] = specialScaleArr
+      const valueAxisData = specialScaleArr
+      const [valueAxisData0] = specialScaleArr
       sourceData.forEach(source => {
-        if (source.name.includes(yAxisData0)) source.yAxisIndex = 0
+        if (source.name.includes(valueAxisData0)) source.yAxisIndex = 0
         else source.yAxisIndex = 1
       })
-      return { title, legendData, xAxisData, yAxisData, sourceData }
+      return { title, legendData, baseAxisData, valueAxisData, sourceData, xOrY }
     }
     
-    return { title, legendData, xAxisData, sourceData }
+    return { title, legendData, baseAxisData, sourceData, xOrY }
   }
   
   if (['bar', 'stackedBar'].includes(chartType)) {
     const legendData = dims
-    let yAxisData = baseLineArr
+    let baseAxisData = baseLineArr
     // 为了应付所谓的前端排序 又得把之前的逻辑毁了
     if (sourceData.length === 1 && legendData.length === 1) {
-      yAxisData = []
+      baseAxisData = []
       const mapForSort = []
       sourceData[0].data.forEach((val, index) => {
         mapForSort.push([baseLineArr[index], val])
@@ -198,12 +201,12 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
       mapForSort.sort((prev, current) => {
         return prev[1] > current[1] ? -1 : 1
       }).forEach(val => {
-        yAxisData.push(val[0])
+        baseAxisData.push(val[0])
         sourceData[0].data.push(val[1])
       })
     }
     
-    return { title, legendData, yAxisData, sourceData }
+    return { title, legendData, baseAxisData, sourceData, xOrY }
   }
   
   return {}
