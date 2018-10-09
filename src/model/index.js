@@ -22,7 +22,7 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
   /********************* chart对象需要满足以下几个属性 *******************/
   /* 1. data（必要）二维数组 table数据格式 包含chart所需要的数据           */
   /* 2. chartType（必要）图表类型                                       */
-  /* 3. title（非必要）图表标题 @TODO 暂时无法处理复杂的title展示            */
+  /* 3. title（非必要）图表标题 @TODO 暂时无法处理复杂的title展示          */
   /* 4. location（非必要）地图类型时指示显示的省份地址                     */
   /* 5. specialAxis（非必要）直角坐标系图表时修复不完整的坐标值，一般为日期  */
   /* 6. description（非必要）numeric时描述当前的描述详情                  */
