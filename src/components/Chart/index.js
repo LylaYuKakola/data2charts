@@ -6,14 +6,12 @@ import 'antd/lib/drawer/style/css'
 import styles from './Chart.css'
 import { getChartData } from '../../model'
 import OriginChartComponent from '../OriginChartComponent'
-import { DraggableAreasGroup } from 'react-draggable-tags';
-import { DraggableArea } from 'react-draggable-tags';
-import './Chart.css'
+import { DraggableAreasGroup, DraggableArea } from 'react-draggable-tags'
 
 const initialTags = [
   { id: 1, name: 'apple' }, { id: 2, name: 'watermelon' }, { id: 3, name: 'banana' },
   { id: 4, name: 'lemon' }, { id: 5, name: 'orange' }, { id: 6, name: 'grape' },
-  { id: 7, name: 'strawberry' }, { id: 8, name: 'cherry' }, { id: 9, name: 'peach' }];
+  { id: 7, name: 'strawberry' }, { id: 8, name: 'cherry' }, { id: 9, name: 'peach' }]
 
 
 const tagStyle = {
@@ -48,23 +46,23 @@ class Chart extends React.PureComponent {
     })
   }
 
+  onXColumnChange = value => {
+    console.log(value)
+  }
+
+  closeDrawer = () => {
+    this.settingDrawer.removeAttribute('style')
+    this.settingMask.removeAttribute('style')
+  }
+
   showDrawer = () => {
     this.settingDrawer.setAttribute('style', 'transform:translate(0)')
     this.settingMask.setAttribute('style', 'display:block')
   };
 
-  closeDrawer = () => {
-    this.settingDrawer.removeAttribute('style')
-    this.settingMask.removeAttribute('style')
-  };
-  
-  onXColumnChange = (value) => {
-    console.log(value)
-  }
-
   render() {
-    const {chart, xColumn, yColumn, DimColumns} = this.state
-    const {chartType} = chart
+    const { chart, xColumn, yColumn, DimColumns } = this.state
+    const { chartType } = chart
     const chartData = getChartData(chart, xColumn, yColumn, DimColumns)
 
     const id = `chart-container-${(Math.random() * 1000).toFixed()}`
