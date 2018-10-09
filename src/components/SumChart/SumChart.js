@@ -2,6 +2,8 @@ import React from 'react'
 import CSSModules from 'react-css-modules'
 import styles from './SumChart.css'
 import { Popover, Icon } from 'antd'
+import 'antd/lib/popover/style/css'
+import 'antd/lib/icon/style/css'
 
 class SumChart extends React.PureComponent {
   render() {
@@ -10,14 +12,9 @@ class SumChart extends React.PureComponent {
       <div styleName="container">
         <div styleName="title">
           {data.title}
-          <Popover
-            overlay={
-              <Popover.Item>{data.explation || ''}</Popover.Item>
-            }
-            placement="topLeft"
-          >
+          <Popover placement="rightTop" content={data.description || ''} trigger="click">
             <span>
-              <i className="iconfont icon-duliangjieshi" />
+              <Icon type="question-circle" theme="outlined" />
             </span>
           </Popover>
         </div>

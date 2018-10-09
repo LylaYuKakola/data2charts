@@ -46,7 +46,7 @@ class BarChart extends React.PureComponent {
     let myChart = echarts.init(dom, 'chongming') // eslint-disable-line
     const data = this.state.data
     const unit = '(B:十亿 M:百万 K:千)'
-  
+
     const {
       title,
       legendData,
@@ -57,7 +57,7 @@ class BarChart extends React.PureComponent {
       tooltip,
       grid,
     } = data
-  
+
     const baseAxis = {
       type: 'category',
       data: baseAxisData,
@@ -88,8 +88,9 @@ class BarChart extends React.PureComponent {
         },
       },
     }
-  
-    let xAxis, yAxis
+
+    let xAxis; let
+      yAxis
     if (xOrY === 'x') {
       xAxis = baseAxis
       yAxis = valueAxis
@@ -97,7 +98,7 @@ class BarChart extends React.PureComponent {
       yAxis = baseAxis
       xAxis = valueAxis
     }
-    
+
     const option = {
       title: {
         text: title,
@@ -156,7 +157,7 @@ class BarChart extends React.PureComponent {
             }).join('<br/>')
           },
       },
-      grid: grid,
+      grid,
       xAxis,
       yAxis,
       series: [],

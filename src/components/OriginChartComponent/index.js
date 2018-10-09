@@ -5,12 +5,7 @@ import PieChart from '../PieChart/PieChart'
 import BarChart from '../BarChart/BarChart'
 import LineChart from '../LineChart/LineChart'
 import SumChart from '../SumChart/SumChart'
-import TreeChart from '../TreeChart/TreeChart'
 import MapChart from '../MapChart/MapChart'
-import FunnelChart from '../FunnelChart/FunnelChart'
-import StoreDetail from '../StoreDetail/StoreDetail'
-import StoreTarget from '../StoreTarget/StoreTarget'
-import BmapChart from '../BmapChart/BmapChart'
 
 function isChartEmpty(data, type) {
   if (type === 'numeric' && data.value === '0') {
@@ -38,7 +33,7 @@ class ChartContainer extends React.Component {
       chartData: props.chartData || '',
     }
   }
-  
+
   toggleFullScreen = () => {
     this.setState({
       isFullScreen: true,
@@ -47,7 +42,7 @@ class ChartContainer extends React.Component {
       document.body.setAttribute('style', 'overflow: hidden')
     })
   }
-  
+
   exitFullScreen = () => {
     this.setState({
       isFullScreen: false,
@@ -56,11 +51,11 @@ class ChartContainer extends React.Component {
       document.body.removeAttribute('style')
     })
   }
-  
+
   changeChartData = chartData => {
     this.setState({ chartData })
   }
-  
+
   render() {
     const { style: componentStyle, children } = this.props
     const { type, chartData } = this.state
@@ -90,23 +85,8 @@ class ChartContainer extends React.Component {
         case 'numeric':
           chart = <SumChart data={chartData} />
           break
-        case 'Tree':
-          chart = <TreeChart data={chartData} />
-          break
         case 'heatMap':
           chart = <MapChart data={chartData} />
-          break
-        case 'funnelTest':
-          chart = <FunnelChart />
-          break
-        case 'board':
-          chart = <StoreDetail data={chartData} />
-          break
-        case 'multiNumeric':
-          chart = <StoreTarget data={chartData} />
-          break
-        case 'bmapScatter':
-          chart = <BmapChart data={chartData} />
           break
         default:
           break

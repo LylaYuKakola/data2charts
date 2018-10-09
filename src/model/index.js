@@ -1,25 +1,14 @@
 /**
  * 按照二维数据的逻辑进行数据封装
- *
  * 1. 二维数组第一列为默认的指标维度
  * 2. 二维数组的最后一列为具体反映到图表上的值
  * 3. 中间几列为分组，进行条件选择
- *
- * 条件选择分为两种
- * 1. 按照某列分组
- * 2. 某几列进行排列组合，顺序按照选项中的选择顺序
- *
- * 问题：
- * 1. 日期的补0操作
- * 2. 直角坐标系和饼图的切换
- * 3. 数据类型的控制（主要为最后一列）
  */
 
 import provinces from '../files/provinces.json'
 
 export function getChartData(chart, xColumn, yColumn, dimColumns) {
-  
-  /********************* chart对象需要满足以下几个属性 *******************/
+  /** ******************* chart对象需要满足以下几个属性 ****************** */
   /* 1. data（必要）二维数组 table数据格式 包含chart所需要的数据           */
   /* 2. chartType（必要）图表类型                                       */
   /* 3. title（非必要）图表标题 @TODO 暂时无法处理复杂的title展示          */
@@ -29,7 +18,7 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
   /* 7. defaultDimName（非必要）当只有一条折线或者一组柱状图时描述默认维度值 */
   /* 8. specialScaleArr（非必要）多轴时的第二条数据轴的值的集合            */
   /* 9. xOrY（非必要）x/y轴为基轴 默认为x                                */
-  /********************************************************************/
+  /** ***************************************************************** */
   const {
     data,
     chartType,
@@ -41,19 +30,18 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
     specialScaleArr,
     xOrY,
   } = { title: '', description: '', defaultDimName: '', xOrY: 'x', ...chart }
-  
+
   // numeric 只显示值
   if (chartType === 'numeric') {
-    const explation = description || ''
     let value
     if (!data || !data[0] || !data[0][0]) {
       value = '--'
     } else {
-      value = data[0][0].indexOf('%') > -1 ? data[0][0] : formatNumber(Number(data[0][0]))
+      value = String(data[0][0]).includes('%') > -1 ? data[0][0] : Number(data[0][0])
     }
-    return { title, value, explation }
+    return { title, value, description }
   }
-  
+
   // 热力图特殊处理
   if (chartType === 'heatMap') {
     const area = provinces[location || '全国']
@@ -69,12 +57,12 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
     }]
     return { title, maxData, area, legendData, sourceData }
   }
-  
+
   // 判断data为空，则直接显示空数据
   if (!data || !data.length || !data[0].length) {
     return { sourceData: [] }
   }
-  
+
   // 构建data的索引
   if (data[0].length === 1) {
     if (xColumn === 0) yColumn = -1
@@ -85,18 +73,22 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
     }
     dimColumns = []
   } else {
-    xColumn = (xColumn || xColumn === 0) ?
-      xColumn :
-      (xOrY === 'x' ? 0 : data[0].length - 1)
-    yColumn = (yColumn || yColumn === 0) ?
-      yColumn :
-      (xOrY !== 'x' ? 0 : data[0].length - 1)
+    if (!xColumn && xColumn !== 0) {
+      xColumn = xOrY === 'x' ? 0 : data[0].length - 1
+    }
+    if (!yColumn && yColumn !== 0) {
+      yColumn = xOrY !== 'x' ? 0 : data[0].length - 1
+    }
     dimColumns = (!dimColumns || !(dimColumns instanceof Array)) ? [] : dimColumns
   }
-  
+
+  // 饼图，只需要配置xColumn和yColumn，xColumn为饼图数据的键，yColumn为饼图数据的值
+  // 需要将dimColumns置空
+  if (chartType === 'pie') dimColumns = []
+
   let dimValues = Array(dimColumns.length)
   let baseLineArr = new Set()
-  
+
   const dataMap = new Map()
   data.forEach((row, index) => {
     let xColumnValue = ''
@@ -111,7 +103,7 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
       xColumnValue = row[xColumn]
       yColumnValue = row[yColumn]
     }
-    
+
     // 构造 key-value 的数据map
     let keyInRow = ''
     let valueInRow
@@ -132,7 +124,7 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
       dimValues[_index].add(row[_val])
     })
   })
-  
+
   baseLineArr = specialAxis || [...baseLineArr]
   const dims = []
   const sourceData = []
@@ -141,8 +133,12 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
     dims.push(defaultDimName)
     sourceData.push({
       name: defaultDimName,
-      data: baseLineArr.map(bLineData => {
-        return dataMap.get(bLineData) || 0
+      data: baseLineArr.map(name => {
+        const value = dataMap.get(name) || 0
+        if (chartType === 'pie') {
+          return { name, value }
+        }
+        return value
       }),
     })
   } else {
@@ -168,11 +164,15 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
       })
     })
   }
-  
+
+  if (chartType === 'pie') {
+    return { title, legendData: baseLineArr, sourceData }
+  }
+
   if (chartType === 'line') {
     const legendData = dims
     const baseAxisData = baseLineArr
-    
+
     // 是否为特殊的y轴
     if (specialScaleArr) {
       const valueAxisData = specialScaleArr
@@ -183,10 +183,10 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
       })
       return { title, legendData, baseAxisData, valueAxisData, sourceData, xOrY }
     }
-    
+
     return { title, legendData, baseAxisData, sourceData, xOrY }
   }
-  
+
   if (['bar', 'stackedBar'].includes(chartType)) {
     const legendData = dims
     let baseAxisData = baseLineArr
@@ -205,9 +205,9 @@ export function getChartData(chart, xColumn, yColumn, dimColumns) {
         sourceData[0].data.push(val[1])
       })
     }
-    
+
     return { title, legendData, baseAxisData, sourceData, xOrY }
   }
-  
+
   return {}
 }

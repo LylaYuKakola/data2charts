@@ -19,7 +19,7 @@ class LineChart extends React.PureComponent {
     lengendNotSelected.forEach(item => {
       notSelected[item] = false
     })
-    
+
     const {
       title,
       legendData,
@@ -28,7 +28,7 @@ class LineChart extends React.PureComponent {
       sourceData,
       xOrY,
     } = data
-    
+
     // 根据data构造坐标轴配置
     const baseAxis = {
       type: 'category',
@@ -70,8 +70,9 @@ class LineChart extends React.PureComponent {
       }))
       // option.series[1].yAxisIndex = 1
     }
-    
-    let xAxis, yAxis
+
+    let xAxis; let
+      yAxis
     if (xOrY === 'x') {
       xAxis = baseAxis
       yAxis = valueAxis
@@ -79,7 +80,7 @@ class LineChart extends React.PureComponent {
       yAxis = baseAxis
       xAxis = valueAxis
     }
-    
+
     const option = {
       title: {
         text: title,

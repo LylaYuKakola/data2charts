@@ -17,7 +17,7 @@ class PieChart extends React.PureComponent {
     const data = this.props.data
     const option = {
       title: {
-        text: '销售额占比',
+        text: data.title || '',
         padding: [4, 0],
         textStyle: {
           fontWeight: 'normal',
@@ -26,7 +26,6 @@ class PieChart extends React.PureComponent {
       },
       tooltip: {
         trigger: 'item',
-        position: [0, '80%'],
         formatter: '{a} <br/>{b} : {c} ({d}%)',
       },
       legend: {
@@ -36,21 +35,18 @@ class PieChart extends React.PureComponent {
         pageIconSize: [20, 20],
         data: data.legendData || [],
       },
-      series: [
-        {
-          name: data.dimention,
-          type: 'pie',
-          radius: '50%',
-          data: data.sourceData || [],
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0,0,0,0.5)',
-            },
+      series: data.sourceData.map(item => ({
+        ...item,
+        type: 'pie',
+        radius: '50%',
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0,0,0,0.5)',
           },
         },
-      ],
+      })),
     }
     myChart.setOption(option, true)
     this.myChart = myChart
