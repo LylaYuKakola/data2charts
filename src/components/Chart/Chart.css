@@ -1,0 +1,58 @@
+.chart-container{
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-setting-drawer{
+  position: absolute;
+  z-index: 1000;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 30%;
+  transform: translate(100%);
+  background-color: white;
+  box-shadow: -5px -5px 10px rgba(0,0,0,0.1), -5px 5px 10px rgba(0,0,0,0.1);
+}
+
+.chart-setting-close-btn{
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #2d97c9;
+}
+
+.chart-setting-panel{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 38px;
+  right: 0;
+  overflow-y: auto;
+}
+
+.chart-setting-btn{
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 18px;
+  color: #2d97c9;
+  cursor: pointer;
+}
+
+.chart-setting-btn:hover{
+  color: #3bc0ff;
+}
+
+.chart-setting-mask{
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(0,0,0,0.4);
+  display: none;
+}

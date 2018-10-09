@@ -1,7 +1,7 @@
 import React from 'react'
 import CSSModules from 'react-css-modules'
 import styles from './StoreTarget.css'
-import { Popover, Icon } from 'antd-mobile'
+import { Popover, Icon } from 'antd'
 import explation from './explation.json'
 
 class StoreTarget extends React.PureComponent {
