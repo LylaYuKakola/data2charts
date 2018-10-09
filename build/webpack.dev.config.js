@@ -18,6 +18,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
+        exclude:[/node_modules/],
         use: ['style-loader', {
           loader: 'css-loader',
           options: {
@@ -25,6 +26,11 @@ module.exports = {
             localIdentName: '[name]__[local]-[hash:base64:5]'
           }
         }]
+      },
+      {
+        test: /\.css$/,
+        exclude:[/src/],
+        use: ['style-loader', 'css-loader']
       },
       {test: /\.scss$/, use: ['style-loader', {
           loader: 'css-loader',
@@ -35,7 +41,16 @@ module.exports = {
         }, 'sass-loader']},
       {test: /\.(jpg|png|gif|bmp|jpeg)$/, use: 'url-loader?limit=5000'},
       {test: /\.(ttf|eot|svg|woff|woff2)$/, use: 'url-loader?limit=5000'},
-      {test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/}
+      {test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/},
+      // {
+      //   test: /\.jsx?$/,
+      //   loader: 'eslint-loader',
+      //   enforce: 'pre',
+      //   include: [path.resolve(__dirname, 'src')],
+      //   options: {
+      //     formatter: require('eslint-friendly-formatter'),
+      //   },
+      // }
     ]
   }
 }

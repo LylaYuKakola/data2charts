@@ -29,7 +29,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/, use: ExtractTextPlugin.extract({
+        test: /\.css$/,
+        exclude:[/node_modules/],
+        use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: [{
             loader: 'css-loader',
@@ -38,6 +40,15 @@ module.exports = {
               localIdentName: '[name]__[local]-[hash:base64:5]'
             }
           }],
+          publicPath: '../'
+        })
+      },
+      {
+        test: /\.css$/,
+        exclude:[/src/],
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [{loader: 'css-loader'}],
           publicPath: '../'
         })
       },
