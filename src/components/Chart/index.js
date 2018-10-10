@@ -8,6 +8,12 @@ import { getChartData } from '../../model'
 import OriginChartComponent from '../OriginChartComponent'
 import { DraggableAreasGroup, DraggableArea } from 'react-draggable-tags'
 
+const group = new DraggableAreasGroup()
+const DraggableArea1 = group.addArea()
+const DraggableArea2 = group.addArea()
+const DraggableArea3 = group.addArea()
+const DraggableArea4 = group.addArea()
+
 const initialTags = [
   { id: 1, name: 'apple' }, { id: 2, name: 'watermelon' }, { id: 3, name: 'banana' },
   { id: 4, name: 'lemon' }, { id: 5, name: 'orange' }, { id: 6, name: 'grape' },
@@ -28,6 +34,16 @@ const tagStyle = {
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
+    const allTags = []
+    if (props.chart.data) {
+      const length = props.chart.data[0].length
+      for (let i = 0; i < length; i++) {
+        allTags.push({
+          id: i,
+          column: i + 1,
+        })
+      }
+    }
     this.state = {
       drawerVisible: false,
       chartType: props.chartType,
@@ -36,7 +52,15 @@ class Chart extends React.PureComponent {
       yColumn: props.yColumn,
       DimColumns: props.DimColumns,
       xOrY: props.xOrY,
+      allTags,
+      // xTags: [],
+      // yTags: [],
+      // dimTags: [],
     }
+    // this.onChange = this.onChange.bind(this)
+    this.onXColumnChange = this.onXColumnChange.bind(this)
+    this.onYColumnChange = this.onYColumnChange.bind(this)
+    this.onDimColumnsChange = this.onDimColumnsChange.bind(this)
   }
 
   componentWillReceiveProps(changes) {
@@ -50,8 +74,38 @@ class Chart extends React.PureComponent {
     })
   }
 
-  onXColumnChange = value => {
-    console.log(value)
+  // onChange = tags => {
+  //   console.log('all')
+  //   console.log(tags)
+  //   this.setState({ allTags: tags })
+  // }
+
+  onXColumnChange = tags => {
+    // console.log('x')
+    // console.log(tags)
+    if (tags.length > 1) {
+      console.log('只能添加一列')
+    }
+    if (tags.length > 0) {
+      this.setState({ xColumn: tags[0].id })
+    }
+  }
+
+  onYColumnChange = tags => {
+    if (tags.length > 1) {
+      console.log('只能添加一列')
+    }
+    if (tags.length > 0) {
+      this.setState({ yColumn: tags[0].id })
+    }
+  }
+
+  onDimColumnsChange = tags => {
+    const DimColumns = []
+    tags.forEach(element => {
+      DimColumns.push(element.id)
+    })
+    this.setState({ DimColumns })
   }
 
   closeDrawer = () => {
@@ -84,21 +138,53 @@ class Chart extends React.PureComponent {
             <div styleName="chart-setting-panel-left">
               所有列
               <div styleName="chart-setting-panel-box-large">
-                hi
+                <DraggableArea1
+                  initialTags={this.state.allTags}
+                  render={({ tag }) => (
+                    <div style={tagStyle}>
+                      第{tag.column}列
+                    </div>
+                  )}
+                  onChange={this.onChange}
+                />
               </div>
             </div>
             <div styleName="chart-setting-panel-right">
               X轴
               <div styleName="chart-setting-panel-box-small">
-                hi
+                <DraggableArea2
+                  initialTags={[]}
+                  render={({ tag }) => (
+                    <div style={tagStyle}>
+                      第{tag.column}列
+                    </div>
+                  )}
+                  onChange={this.onXColumnChange}
+                />
               </div>
               y轴
               <div styleName="chart-setting-panel-box-small">
-                hi
+                <DraggableArea3
+                  initialTags={[]}
+                  render={({ tag }) => (
+                    <div style={tagStyle}>
+                      第{tag.column}列
+                    </div>
+                  )}
+                  onChange={this.onYColumnChange}
+                />
               </div>
               合并列
               <div styleName="chart-setting-panel-box-median">
-                hi
+                <DraggableArea4
+                  initialTags={[]}
+                  render={({ tag }) => (
+                    <div style={tagStyle}>
+                      第{tag.column}列
+                    </div>
+                  )}
+                  onChange={this.onDimColumnsChange}
+                />
               </div>
             </div>
           </div>
@@ -113,17 +199,6 @@ class Chart extends React.PureComponent {
           styleName="chart-setting-mask"
           ref={settingMask => this.settingMask = settingMask}
         />
-        {/* <div styleName="Simple">
-          <DraggableArea
-            initialTags={initialTags}
-            render={({ tag }) => (
-              <div style={tagStyle}>
-                {tag.name}
-              </div>
-            )}
-            onChange={(tags) => console.log(tags)}
-          />
-        </div> */}
       </div>
     )
   }
