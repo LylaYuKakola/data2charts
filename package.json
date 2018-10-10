@@ -1,6 +1,6 @@
 {
   "name": "data2charts",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "二维数组数据转换echarts",
   "main": "lib/index.js",
   "files": [

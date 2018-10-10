@@ -6,19 +6,13 @@ import 'antd/lib/drawer/style/css'
 import styles from './Chart.css'
 import { getChartData } from '../../model'
 import OriginChartComponent from '../OriginChartComponent'
-import { DraggableAreasGroup, DraggableArea } from 'react-draggable-tags'
+import { DraggableAreasGroup } from 'react-draggable-tags'
 
 const group = new DraggableAreasGroup()
 const DraggableArea1 = group.addArea()
 const DraggableArea2 = group.addArea()
 const DraggableArea3 = group.addArea()
 const DraggableArea4 = group.addArea()
-
-const initialTags = [
-  { id: 1, name: 'apple' }, { id: 2, name: 'watermelon' }, { id: 3, name: 'banana' },
-  { id: 4, name: 'lemon' }, { id: 5, name: 'orange' }, { id: 6, name: 'grape' },
-  { id: 7, name: 'strawberry' }, { id: 8, name: 'cherry' }, { id: 9, name: 'peach' }]
-
 
 const tagStyle = {
   margin: '3px',
@@ -31,19 +25,26 @@ const tagStyle = {
   background: 'rgba(255, 255, 255, 0.7)',
 }
 
+/**
+ * 2018/10/10 yurt
+ * 当前主要问题为阻止了props的更新，所以暂时只能通过组件内部去更改图表和配置
+ * 1. 是否需要从外部修改
+ * 2. 从外部修改是否只提供一个api方法方便组件状态管理（影响组件扩展性）
+ */
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
 
     let { xColumn, yColumn, dimColumns, xOrY } = props
+    const { chart } = props
 
     const xTags = []
     const yTags = []
     const dimTags = []
 
-    if (props.chart.data) {
+    // 初始化 xOrY，xColumn，yColumn，dimColumns，xTags，yTags，dimTags
+    if (chart || chart.data) {
       const length = props.chart.data[0].length
-
       xOrY = xOrY || 'x'
       if (!xColumn && xColumn !== 0) {
         xColumn = xOrY === 'x' ? 0 : length - 1
@@ -64,6 +65,19 @@ class Chart extends React.PureComponent {
         }
       }
     }
+
+    // 计算'所有列'中的tag（因为配置的时dragGroup的initialTags，所以只在初始化时起作用）
+    const allTags = []
+    chart.data[0].forEach((val, index) => {
+      if (index !== xColumn &&
+        index !== yColumn &&
+        !(dimColumns.includes(index))) {
+        allTags.push({ id: index, column: index + 1 })
+      }
+    })
+    // 初始化使用，不放在state中管理
+    this.allTags = allTags
+
     this.state = {
       drawerVisible: false,
       chartType: props.chartType,
@@ -76,15 +90,13 @@ class Chart extends React.PureComponent {
       yTags,
       dimTags,
     }
-    this.onXColumnChange = this.onXColumnChange.bind(this)
-    this.onYColumnChange = this.onYColumnChange.bind(this)
-    this.onDimColumnsChange = this.onDimColumnsChange.bind(this)
   }
 
   onXColumnChange = tags => {
     let xColumn
     let xTags
     if (tags.length > 1) {
+      // 当存在两个tag时，选取新拖入的tag
       xColumn = tags[1].id
       xTags = [tags[1]]
     } else if (tags.length < 1) {
@@ -95,9 +107,9 @@ class Chart extends React.PureComponent {
       xTags = [tags[0]]
     }
     this.setState({ xColumn, xTags }, () => {
-      if (tags.length > 1) {
-        this.addTagToAllTagCell(tags[0])
-      }
+      // 当存在两个tag时，把原来存在的tag放回'所有'框中
+      if (tags.length > 1) this.addTagToAllTagCell(tags[0])
+      tags = null
     })
   }
 
@@ -105,6 +117,7 @@ class Chart extends React.PureComponent {
     let yColumn
     let yTags
     if (tags.length > 1) {
+      // 当存在两个tag时，选取新拖入的tag
       yColumn = tags[1].id
       yTags = [tags[1]]
     } else if (tags.length < 1) {
@@ -115,9 +128,9 @@ class Chart extends React.PureComponent {
       yTags = [tags[0]]
     }
     this.setState({ yColumn, yTags }, () => {
-      if (tags.length > 1) {
-        this.addTagToAllTagCell(tags[0])
-      }
+      // 当存在两个tag时，把原来存在的tag放回'所有'框中
+      if (tags.length > 1) this.addTagToAllTagCell(tags[0])
+      tags = null
     })
   }
 
@@ -152,19 +165,10 @@ class Chart extends React.PureComponent {
       dimTags,
     } = this.state
 
-    const allTags = []
-    chart.data[0].forEach((val, index) => {
-      if (index !== xColumn &&
-        index !== yColumn &&
-        !(dimColumns.includes(index))) {
-        allTags.push({ id: index, column: index + 1 })
-      }
-    })
-
+    // 计算图表数据
     const chartData = getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns)
 
     const id = `chart-container-${(Math.random() * 1000).toFixed()}`
-
     return (
       <div styleName="chart-container" id={id}>
         <OriginChartComponent
@@ -180,7 +184,7 @@ class Chart extends React.PureComponent {
               所有列
               <div styleName="chart-setting-panel-box-large">
                 <DraggableArea1
-                  initialTags={allTags}
+                  initialTags={this.allTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
                       第{tag.column}列
@@ -234,7 +238,6 @@ class Chart extends React.PureComponent {
               <Icon type="right" theme="outlined" />
             </div>
           </div>
-
         </div>
         <div
           styleName="chart-setting-mask"
