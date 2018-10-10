@@ -53,7 +53,11 @@ module.exports = {
           formatter: require('eslint-friendly-formatter'),
         },
       },
-      { test: /\.(jsx|js)$/, use: 'babel-loader', exclude: /node_modules/ },
+      {
+        test: /\.(jsx|js)$/,
+        use: 'babel-loader',
+        include: [/src/, /node_modules\/react-draggable-tags/],
+      },
     ],
   },
 }
