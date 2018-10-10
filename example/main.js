@@ -105,7 +105,7 @@ ReactDOM.render(<div>
     chart={testChart1}
     xColumn={0}
     yColumn={3}
-    DimColumns={[1, 2]}
+    dimColumns={[1, 2]}
   />
   <hr />
   <p>y轴为基准line增加DimColumns配置</p>
@@ -122,7 +122,7 @@ ReactDOM.render(<div>
     chart={testChart2}
     xColumn={3}
     yColumn={0}
-    DimColumns={[1, 2]}
+    dimColumns={[1, 2]}
   />
   <hr />
   <p>x轴为基准bar默认配置(默认排序)</p>
@@ -138,7 +138,7 @@ ReactDOM.render(<div>
     chart={testChart4}
     xColumn={3}
     yColumn={0}
-    DimColumns={[1, 2]}
+    dimColumns={[1, 2]}
   />
   <hr />
   <p>饼图</p>

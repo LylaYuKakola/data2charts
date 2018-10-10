@@ -11,6 +11,28 @@ import { lengendNotSelected } from './option'
 
 class LineChart extends React.PureComponent {
   componentDidMount() {
+    this.renderChart()
+  }
+
+  componentWillReceiveProps(changes) {
+    this.setState({
+      data: changes.data,
+    })
+  }
+
+  componentDidUpdate() {
+    this.renderChart()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
+    this.myChart.dispose()
+    this.myChart = null
+  }
+  handleResize = () => {
+    this.myChart.resize()
+  }
+  renderChart() {
     const dom = this.chart
     echarts.registerTheme('chongming', chartCss)
     let myChart = echarts.init(dom, 'chongming') // eslint-disable-line
@@ -115,14 +137,7 @@ class LineChart extends React.PureComponent {
     this.myChart = myChart
     window.addEventListener('resize', this.handleResize)
   }
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize)
-    this.myChart.dispose()
-    this.myChart = null
-  }
-  handleResize = () => {
-    this.myChart.resize()
-  }
+
   render() {
     return <div styleName="container" ref={el => { this.chart = el }} />
   }

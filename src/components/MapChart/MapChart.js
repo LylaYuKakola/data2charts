@@ -7,6 +7,28 @@ import chinaCity from '../../files/chinaCity/chinaCity.json'
 
 class MapChart extends React.PureComponent {
   componentDidMount() {
+    this.renderChart()
+  }
+
+  componentWillReceiveProps(changes) {
+    this.setState({
+      data: changes.data,
+    })
+  }
+
+  componentDidUpdate() {
+    this.renderChart()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => this.handleResize())
+    this.myChart.dispose()
+    this.myChart = null
+  }
+  handleResize() {
+    if (this.myChart) this.myChart.resize() // 屏幕resize会出现mychart对象丢失的现象，在此增加判断
+  }
+  renderChart() {
     const dom = this.chart
     echarts.registerTheme('chongming', chartCss)
     let myChart = echarts.init(dom, 'chongming') // eslint-disable-line
@@ -102,14 +124,6 @@ class MapChart extends React.PureComponent {
     myChart.setOption(option, true)
     this.myChart = myChart
     window.addEventListener('resize', () => this.handleResize())
-  }
-  componentWillUnmount() {
-    window.removeEventListener('resize', () => this.handleResize())
-    this.myChart.dispose()
-    this.myChart = null
-  }
-  handleResize() {
-    if (this.myChart) this.myChart.resize() // 屏幕resize会出现mychart对象丢失的现象，在此增加判断
   }
   render() {
     return <div styleName="container" ref={el => { this.chart = el }} />

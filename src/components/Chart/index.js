@@ -34,78 +34,99 @@ const tagStyle = {
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
-    const allTags = []
+
+    let { xColumn, yColumn, dimColumns, xOrY } = props
+
+    const xTags = []
+    const yTags = []
+    const dimTags = []
+
     if (props.chart.data) {
       const length = props.chart.data[0].length
+
+      xOrY = xOrY || 'x'
+      if (!xColumn && xColumn !== 0) {
+        xColumn = xOrY === 'x' ? 0 : length - 1
+      }
+      if (!yColumn && yColumn !== 0) {
+        yColumn = xOrY !== 'x' ? 0 : length - 1
+      }
+      dimColumns = (!dimColumns || !(dimColumns instanceof Array)) ? [] : dimColumns
+
       for (let i = 0; i < length; i++) {
-        allTags.push({
-          id: i,
-          column: i + 1,
-        })
+        const _obj = { id: i, column: i + 1 }
+        if (xColumn === i) {
+          xTags.push(_obj)
+        } else if (yColumn === i) {
+          yTags.push(_obj)
+        } else if (dimColumns.includes(i)) {
+          dimTags.push(_obj)
+        }
       }
     }
     this.state = {
       drawerVisible: false,
       chartType: props.chartType,
       chart: props.chart || {},
-      xColumn: props.xColumn,
-      yColumn: props.yColumn,
-      DimColumns: props.DimColumns,
+      xColumn,
+      yColumn,
+      dimColumns,
       xOrY: props.xOrY,
-      allTags,
-      // xTags: [],
-      // yTags: [],
-      // dimTags: [],
+      xTags,
+      yTags,
+      dimTags,
     }
-    // this.onChange = this.onChange.bind(this)
     this.onXColumnChange = this.onXColumnChange.bind(this)
     this.onYColumnChange = this.onYColumnChange.bind(this)
     this.onDimColumnsChange = this.onDimColumnsChange.bind(this)
   }
 
-  componentWillReceiveProps(changes) {
-    this.setState({
-      chart: changes.chart,
-      chartType: changes.chartType,
-      xColumn: changes.xColumn,
-      yColumn: changes.yColumn,
-      DimColumns: changes.DimColumns,
-      xOrY: changes.xOrY,
-    })
-  }
-
-  // onChange = tags => {
-  //   console.log('all')
-  //   console.log(tags)
-  //   this.setState({ allTags: tags })
-  // }
-
   onXColumnChange = tags => {
-    // console.log('x')
-    // console.log(tags)
+    let xColumn
+    let xTags
     if (tags.length > 1) {
-      console.log('只能添加一列')
+      xColumn = tags[1].id
+      xTags = [tags[1]]
+    } else if (tags.length < 1) {
+      xColumn = null
+      xTags = []
+    } else {
+      xColumn = tags[0].id
+      xTags = [tags[0]]
     }
-    if (tags.length > 0) {
-      this.setState({ xColumn: tags[0].id })
-    }
+    this.setState({ xColumn, xTags }, () => {
+      if (tags.length > 1) {
+        this.addTagToAllTagCell(tags[0])
+      }
+    })
   }
 
   onYColumnChange = tags => {
+    let yColumn
+    let yTags
     if (tags.length > 1) {
-      console.log('只能添加一列')
+      yColumn = tags[1].id
+      yTags = [tags[1]]
+    } else if (tags.length < 1) {
+      yColumn = null
+      yTags = []
+    } else {
+      yColumn = tags[0].id
+      yTags = [tags[0]]
     }
-    if (tags.length > 0) {
-      this.setState({ yColumn: tags[0].id })
-    }
+    this.setState({ yColumn, yTags }, () => {
+      if (tags.length > 1) {
+        this.addTagToAllTagCell(tags[0])
+      }
+    })
   }
 
   onDimColumnsChange = tags => {
-    const DimColumns = []
+    const dimColumns = []
     tags.forEach(element => {
-      DimColumns.push(element.id)
+      dimColumns.push(element.id)
     })
-    this.setState({ DimColumns })
+    this.setState({ dimColumns, dimTags: tags })
   }
 
   closeDrawer = () => {
@@ -119,8 +140,28 @@ class Chart extends React.PureComponent {
   };
 
   render() {
-    const { chart, chartType, xOrY, xColumn, yColumn, DimColumns } = this.state
-    const chartData = getChartData(chart, chartType, xOrY, xColumn, yColumn, DimColumns)
+    const {
+      chart,
+      chartType,
+      xOrY,
+      xColumn,
+      yColumn,
+      dimColumns,
+      xTags,
+      yTags,
+      dimTags,
+    } = this.state
+
+    const allTags = []
+    chart.data[0].forEach((val, index) => {
+      if (index !== xColumn &&
+        index !== yColumn &&
+        !(dimColumns.includes(index))) {
+        allTags.push({ id: index, column: index + 1 })
+      }
+    })
+
+    const chartData = getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns)
 
     const id = `chart-container-${(Math.random() * 1000).toFixed()}`
 
@@ -139,13 +180,13 @@ class Chart extends React.PureComponent {
               所有列
               <div styleName="chart-setting-panel-box-large">
                 <DraggableArea1
-                  initialTags={this.state.allTags}
+                  initialTags={allTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
                       第{tag.column}列
                     </div>
                   )}
-                  onChange={this.onChange}
+                  getAddTagFunc={addTagToAllTagCell => this.addTagToAllTagCell = addTagToAllTagCell}
                 />
               </div>
             </div>
@@ -153,7 +194,7 @@ class Chart extends React.PureComponent {
               X轴
               <div styleName="chart-setting-panel-box-small">
                 <DraggableArea2
-                  initialTags={[]}
+                  tags={xTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
                       第{tag.column}列
@@ -165,7 +206,7 @@ class Chart extends React.PureComponent {
               y轴
               <div styleName="chart-setting-panel-box-small">
                 <DraggableArea3
-                  initialTags={[]}
+                  tags={yTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
                       第{tag.column}列
@@ -177,7 +218,7 @@ class Chart extends React.PureComponent {
               合并列
               <div styleName="chart-setting-panel-box-median">
                 <DraggableArea4
-                  initialTags={[]}
+                  tags={dimTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
                       第{tag.column}列
