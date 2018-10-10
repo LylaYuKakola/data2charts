@@ -26,6 +26,26 @@ module.exports = {
     new ExtractTextPlugin('styles.css'), // 抽取CSS文件
     new OptimizeCssAssetsPlugin(), // 压缩CSS的插件
   ],
+  externals: {
+    react: {
+      amd: 'react',
+      root: 'React',
+      commonjs: 'react',
+      commonjs2: 'react',
+    },
+    'react-dom': {
+      amd: 'react-dom',
+      root: 'ReactDOM',
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+    },
+    echarts: {
+      amd: 'echarts',
+      root: 'echarts',
+      commonjs: 'echarts',
+      commonjs2: 'echarts',
+    },
+  },
   module: {
     rules: [
       {

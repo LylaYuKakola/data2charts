@@ -56,7 +56,7 @@ module.exports = {
       {
         test: /\.(jsx|js)$/,
         use: 'babel-loader',
-        include: [/src/, /node_modules\/react-draggable-tags/],
+        include: [/src/, /example/, /node_modules\/react-draggable-tags/],
       },
     ],
   },
