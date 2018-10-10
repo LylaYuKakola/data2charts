@@ -92,11 +92,13 @@ ReactDOM.render(<div>
     type={'line'}
     chartData={testData}
   />
+  <hr />
   <p>x轴为基准line默认配置</p>
   <Chart
     chartType="line"
     chart={testChart1}
   />
+  <hr />
   <p>x轴为基准line增加DimColumns配置</p>
   <Chart
     chartType="line"
@@ -105,12 +107,14 @@ ReactDOM.render(<div>
     yColumn={3}
     DimColumns={[1, 2]}
   />
+  <hr />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
     chartType="line"
     xOrY="y"
     chart={testChart2}
   />
+  <hr />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
     chartType="line"
@@ -120,11 +124,13 @@ ReactDOM.render(<div>
     yColumn={0}
     DimColumns={[1, 2]}
   />
+  <hr />
   <p>x轴为基准bar默认配置(默认排序)</p>
   <Chart
     chartType="bar"
     chart={testChart3}
   />
+  <hr />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
     chartType="bar"
@@ -134,6 +140,7 @@ ReactDOM.render(<div>
     yColumn={0}
     DimColumns={[1, 2]}
   />
+  <hr />
   <p>饼图</p>
   <Chart
     chartType="pie"
@@ -141,6 +148,8 @@ ReactDOM.render(<div>
     xColumn={0}
     yColumn={3}
   />
+  <hr />
+  <p>numreic</p>
   <Chart
     chartType="numeric"
     chart={testChartForSum}

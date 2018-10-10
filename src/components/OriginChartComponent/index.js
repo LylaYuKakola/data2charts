@@ -1,5 +1,7 @@
 import React from 'react'
 import CSSModules from 'react-css-modules'
+import { Icon } from 'antd'
+import 'antd/lib/icon/style/css'
 import styles from './Chart.css'
 import PieChart from '../PieChart/PieChart'
 import BarChart from '../BarChart/BarChart'
@@ -27,11 +29,17 @@ class ChartContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      search: '',
       isFullScreen: false,
       type: props.type || '',
       chartData: props.chartData || '',
     }
+  }
+
+  componentWillReceiveProps(changes) {
+    this.setState({
+      type: changes.type,
+      chartData: changes.chartData,
+    })
   }
 
   toggleFullScreen = () => {
@@ -109,13 +117,17 @@ class ChartContainer extends React.Component {
         {
           type === 'numeric' || type === 'board' || type === 'multiNumeric'
             ? null
-            : <i className={iconQpStyle} onClick={this.toggleFullScreen} />
+            : (<div styleName="chart-wrapper-fullscreen-btn">
+              <Icon type="fullscreen" theme="outlined" onClick={this.toggleFullScreen} />
+            </div>)
         }
         {chart}
         {
           this.state.isFullScreen ?
             <div styleName="chart-fullscreen">
-              <i className="iconfont icon-guanbi1" onClick={this.exitFullScreen} />
+              (<div styleName="chart-wrapper-fullscreen-btn">
+                <Icon type="fullscreen-exit" theme="outlined" onClick={this.exitFullScreen} />
+              </div>)
               <div styleName="chart-fullscreen-container">
                 {chart}
                 <div styleName="chart-fullscreen-text">横屏浏览效果更佳</div>
