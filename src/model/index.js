@@ -92,7 +92,10 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
 
   // 饼图，只需要配置xColumn和yColumn，xColumn为饼图数据的键，yColumn为饼图数据的值
   // 需要将dimColumns置空
-  if (chartType === 'pie') dimColumns = []
+  if (chartType === 'pie') {
+    dimColumns = []
+    if (xOrY !== 'x') [xColumn, yColumn] = [yColumn, xColumn]
+  }
 
   let dimValues = Array(dimColumns.length)
   let baseLineArr = new Set()

@@ -1,6 +1,6 @@
 {
   "name": "data2charts",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "二维数组数据转换echarts",
   "main": "lib/index.js",
   "files": [
@@ -30,11 +30,12 @@
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.6.0",
+    "antd": "^3.10.0",
     "react": "^16.1.1",
-    "react-dom": "^16.1.1"
+    "react-dom": "^16.1.1",
+    "echarts": "^4.2.0-rc.1"
   },
   "devDependencies": {
-    "antd": "^3.10.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^7.1.2",
@@ -45,7 +46,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "clean-webpack-plugin": "^0.1.17",
     "css-loader": "^0.28.7",
-    "echarts": "^4.2.0-rc.1",
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-friendly-formatter": "^4.0.1",

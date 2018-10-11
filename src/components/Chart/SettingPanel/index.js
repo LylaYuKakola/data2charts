@@ -233,7 +233,7 @@ class SettingPanel extends React.PureComponent {
               </div>
             </div>
             <div styleName="setting-panel-right-right">
-              X轴
+              { chartType === 'pie' ? '指标列(单选)' : 'X轴列(单选)' }
               <div styleName="setting-panel-right-box-small">
                 <DraggableArea2
                   tags={xTags}
@@ -245,7 +245,7 @@ class SettingPanel extends React.PureComponent {
                   onChange={this.onXColumnChange}
                 />
               </div>
-              y轴
+              { chartType === 'pie' ? '数值列(单选)' : 'Y轴列(单选)' }
               <div styleName="setting-panel-right-box-small">
                 <DraggableArea3
                   tags={yTags}
