@@ -1,0 +1,76 @@
+.setting-panel {
+  position: absolute;
+  display: flex;
+  z-index: 1000;
+  background-color: #fff;
+  top: 80px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  box-shadow: -5px -5px 10px rgba(0,0,0,0.1), 5px -5px 10px rgba(0,0,0,0.1);
+}
+
+.setting-panel-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #2d97c9;
+}
+
+.setting-panel-close-btn:hover{
+  color: #3bc0ff;
+}
+
+.setting-panel-left, .setting-panel-right{
+  height: 100%;
+  margin: 10px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.setting-panel-left{
+  width: 35%;
+  border-right: 1px dashed #e2e2e2;
+  overflow-y: scroll;
+}
+
+.setting-panel-right{
+  width: 70%;
+  display: flex;
+}
+
+.setting-panel-left-cell {
+  margin: 10px;
+}
+
+.setting-panel-left-cell > span{
+  display: block;
+}
+
+.setting-panel-right-left, .setting-panel-right-right{
+  position: relative;
+  display: flex;
+  width: 50%;
+  padding: 10px;
+  flex-direction: column;
+}
+
+.setting-panel-right-box-large,
+.setting-panel-right-box-small,
+.setting-panel-right-box-median{
+  border: 1px solid #E9E9E9;
+  border-radius: 4px;
+  height: 100%;
+}
+
+.setting-mask{
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(0,0,0,0.4);
+}

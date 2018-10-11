@@ -7,17 +7,25 @@
 
 import provinces from '../files/provinces.json'
 
+/**
+ * 计算图表数据
+ * @param chart 图表配置对象
+ * @param chartType 图表类型
+ * @param xOrY x/y轴为基轴，针对直角坐标系图表
+ * @param xColumn x轴对应的列
+ * @param yColumn y轴对应的列
+ * @param dimColumns 分组对应的列
+ * @return {*}
+ */
 export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns) {
   /** ******************* chart对象需要满足以下几个属性 ****************** */
-  /* 1. data（必要）二维数组 table数据格式 包含chart所需要的数据           */
-  /* 2. chartType（必要）图表类型                                       */
-  /* 3. title（非必要）图表标题 @TODO 暂时无法处理复杂的title展示          */
-  /* 4. location（非必要）地图类型时指示显示的省份地址                     */
-  /* 5. specialAxis（非必要）直角坐标系图表时修复不完整的坐标值，一般为日期  */
-  /* 6. description（非必要）numeric时描述当前的描述详情                  */
-  /* 7. defaultDimName（非必要）当只有一条折线或者一组柱状图时描述默认维度值 */
-  /* 8. specialScaleArr（非必要）多轴时的第二条数据轴的值的集合            */
-  /* 9. xOrY（非必要）x/y轴为基轴 默认为x                                */
+  /*  1. data（必要）二维数组 table数据格式 包含chart所需要的数据            */
+  /*  2. title（非必要）图表标题 @TODO 暂时无法处理复杂的title展示           */
+  /*  3. location（非必要）地图类型时指示显示的省份地址                      */
+  /*  4. specialAxis（非必要）直角坐标系图表时修复不完整的坐标值，一般为日期   */
+  /*  5. description（非必要）numeric时描述当前的描述详情                   */
+  /*  6. defaultDimName（非必要）当只有一条折线或者一组柱状图时描述默认维度值  */
+  /*  7. specialScaleArr（非必要）多轴时的第二条数据轴的值的集合             */
   /** ***************************************************************** */
   const {
     data,

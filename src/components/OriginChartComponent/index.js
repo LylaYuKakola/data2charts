@@ -29,7 +29,7 @@ class ChartContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isFullScreen: false,
+      isFullScreen: props.isFullScreen,
       type: props.type || '',
       chartData: props.chartData || '',
     }
@@ -42,31 +42,13 @@ class ChartContainer extends React.Component {
     })
   }
 
-  toggleFullScreen = () => {
-    this.setState({
-      isFullScreen: true,
-    }, () => {
-      if (this.toolbar) this.toolbar.setAttribute('style', `position:fixed; z-Index:1000`)
-      document.body.setAttribute('style', 'overflow: hidden')
-    })
-  }
-
-  exitFullScreen = () => {
-    this.setState({
-      isFullScreen: false,
-    }, () => {
-      if (this.toolbar) this.toolbar.removeAttribute('style')
-      document.body.removeAttribute('style')
-    })
-  }
-
   changeChartData = chartData => {
     this.setState({ chartData })
   }
 
   render() {
     const { style: componentStyle, children } = this.props
-    const { type, chartData } = this.state
+    const { type, chartData, isFullScreen } = this.state
     let chart = null
     let hasData = true
     if (isChartEmpty(chartData, type)) {
@@ -113,29 +95,13 @@ class ChartContainer extends React.Component {
       containerStyle = null
     }
     return (
-      <div styleName="chart-wrapper" className="border-top-1px" style={containerStyle} ref={el => { this.wrapper = el }}>
-        {
-          type === 'numeric' || type === 'board' || type === 'multiNumeric'
-            ? null
-            : (<div styleName="chart-wrapper-fullscreen-btn">
-              <Icon type="fullscreen" theme="outlined" onClick={this.toggleFullScreen} />
-            </div>)
-        }
+      <div
+        styleName={!isFullScreen ? 'chart-wrapper' : 'chart-fullscreen-container'}
+        className="border-top-1px"
+        style={!isFullScreen ? containerStyle : {}}
+        ref={el => { this.wrapper = el }}
+      >
         {chart}
-        {
-          this.state.isFullScreen ?
-            <div styleName="chart-fullscreen">
-              (<div styleName="chart-wrapper-fullscreen-btn">
-                <Icon type="fullscreen-exit" theme="outlined" onClick={this.exitFullScreen} />
-              </div>)
-              <div styleName="chart-fullscreen-container">
-                {chart}
-                <div styleName="chart-fullscreen-text">横屏浏览效果更佳</div>
-              </div>
-            </div>
-            :
-            null
-        }
         {
           children && (
             <div styleName="chart-toolbar" ref={t => this.toolbar = t}>{children}</div>
