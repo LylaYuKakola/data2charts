@@ -46,14 +46,12 @@ class Chart extends React.PureComponent {
   }
 
   openFullScreenHandler = () => {
-    debugger
     this.setState({
       isFullScreen: true,
     })
   }
 
   closeFullScreenHandler = () => {
-    debugger
     this.setState({
       isFullScreen: false,
     })
@@ -103,8 +101,6 @@ class Chart extends React.PureComponent {
 
   render() {
     const { chart, chartType, xOrY, xColumn, yColumn, dimColumns, isFullScreen } = this.state
-
-    debugger
 
     // 计算图表数据
     const chartData = getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns)
