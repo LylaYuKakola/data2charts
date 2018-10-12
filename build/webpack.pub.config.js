@@ -7,6 +7,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 // 导入压缩CSS的插件
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
 module.exports = {
   entry: path.join(__dirname, '../src/index.js'),
   devtool: 'cheap-module-source-map',
@@ -25,6 +27,7 @@ module.exports = {
     }),
     new ExtractTextPlugin('styles.css'), // 抽取CSS文件
     new OptimizeCssAssetsPlugin(), // 压缩CSS的插件
+    new BundleAnalyzerPlugin(),
   ],
   externals: {
     react: {
@@ -39,11 +42,11 @@ module.exports = {
       commonjs: 'react-dom',
       commonjs2: 'react-dom',
     },
-    echarts: {
-      amd: 'echarts',
-      root: 'echarts',
-      commonjs: 'echarts',
-      commonjs2: 'echarts',
+    antd: {
+      amd: 'antd',
+      root: 'antd',
+      commonjs: 'antd',
+      commonjs2: 'antd',
     },
   },
   module: {

@@ -34,8 +34,8 @@ class LineChart extends React.PureComponent {
   }
   renderChart() {
     const dom = this.chart
-    echarts.registerTheme('chongming', chartCss)
-    let myChart = echarts.init(dom, 'chongming') // eslint-disable-line
+    echarts.registerTheme('data2charts', chartCss)
+    let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
     const data = this.props.data
     const notSelected = {}
     lengendNotSelected.forEach(item => {

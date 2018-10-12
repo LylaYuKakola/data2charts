@@ -17,8 +17,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3000 --hot",
-    "pub": "webpack --config ./build/webpack.pub.config.js",
-    "prepublish": "npm run pub"
+    "build": "webpack --config ./build/webpack.pub.config.js",
+    "prepublish": "npm run build",
+    "analyz": "NODE_ENV=production npm_config_report=true npm run build"
   },
   "keywords": [
     "react",
@@ -65,6 +66,7 @@
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
+    "webpack-bundle-analyzer": "^3.0.2",
     "webpack-dev-server": "^2.9.4"
   }
 }

@@ -42,10 +42,9 @@ class BarChart extends React.PureComponent {
 
   renderChart() {
     const dom = this.chart
-    echarts.registerTheme('chongming', chartCss)
-    let myChart = echarts.init(dom, 'chongming') // eslint-disable-line
+    echarts.registerTheme('data2charts', chartCss)
+    let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
     const data = this.state.data
-    const unit = '(B:十亿 M:百万 K:千)'
 
     const {
       title,

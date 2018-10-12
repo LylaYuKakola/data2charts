@@ -1,6 +1,5 @@
 import React from 'react'
 import CSSModules from 'react-css-modules'
-import { Icon } from 'antd'
 import 'antd/lib/icon/style/css'
 import styles from './Chart.css'
 import PieChart from '../PieChart/PieChart'
@@ -81,10 +80,6 @@ class ChartContainer extends React.Component {
         default:
           break
       }
-    }
-    let iconQpStyle = 'iconfont icon-quanping'
-    if (this.props.position && this.props.position === 'recommend') {
-      iconQpStyle = 'iconfont icon-quanping recommend-quanping'
     }
     let containerStyle = {
       height: 300,
