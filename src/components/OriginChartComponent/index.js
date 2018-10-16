@@ -6,7 +6,7 @@ import PieChart from '../PieChart/PieChart'
 import BarChart from '../BarChart/BarChart'
 import LineChart from '../LineChart/LineChart'
 import SumChart from '../SumChart/SumChart'
-import MapChart from '../MapChart/MapChart'
+// import MapChart from '../MapChart/MapChart'
 
 function isChartEmpty(data, type) {
   if (type === 'numeric' && data.value === '0') {
@@ -75,7 +75,8 @@ class ChartContainer extends React.Component {
           chart = <SumChart data={chartData} />
           break
         case 'heatMap':
-          chart = <MapChart data={chartData} />
+          // chart = <MapChart data={chartData} />
+          chart = null
           break
         default:
           break

@@ -76,7 +76,6 @@ class SettingPanel extends React.PureComponent {
   }
 
   onDimColumnsChange = tags => {
-    debugger
     this.result.dimColumns = tags.map(tag => tag.id)
     this.setState({ dimColumnsTags: tags })
   }
