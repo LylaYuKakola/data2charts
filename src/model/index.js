@@ -5,8 +5,6 @@
  * 3. 中间几列为分组，进行条件选择
  */
 
-import provinces from '../files/provinces.json'
-
 /**
  * 计算图表数据
  * @param chart 图表配置对象
@@ -52,18 +50,9 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
 
   // 热力图特殊处理
   if (chartType === 'heatMap') {
-    const area = provinces[location || '全国']
+    const area = location
     const legendData = [defaultDimName]
-    let maxData = 0
-    const sourceData = [{
-      name: defaultDimName,
-      data: data.map(row => {
-        const [name, value] = row
-        if (maxData < value) maxData = value
-        return { name, value }
-      }),
-    }]
-    return { title, maxData, area, legendData, sourceData }
+    return { title, area, legendData, originDataArr: data }
   }
 
   // 判断data为空，则直接显示空数据

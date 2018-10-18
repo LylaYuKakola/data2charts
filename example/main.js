@@ -54,6 +54,17 @@ const data = [
   ['2020', '型号002', '渠道2', 0],
 ]
 
+const dataForHeatMap = [
+  ['北京市', '昌平区', 2.3],
+  ['北京市', '海淀区', 2.8],
+  ['天津市', '南开区', 2.1],
+  ['河北省', '保定市', 1.9],
+  ['河北省', '沧州市', 1.1],
+  ['重庆市', '永川区', 1.3],
+  ['重庆市', '北碚区', 2.1],
+  ['湖北省', '武汉市', 100],
+]
+
 const testChart1 = {
   data,
   chartType: 'line',
@@ -78,6 +89,12 @@ const testChartForPie = {
   data,
   chartType: 'pie',
   title: 'pie',
+}
+
+const testChartForHeatMap = {
+  data: dataForHeatMap,
+  chartType: 'heatMap',
+  title: 'heatMap',
 }
 
 const testChartForSum = {
@@ -153,5 +170,9 @@ ReactDOM.render(<div>
   <Chart
     chartType="numeric"
     chart={testChartForSum}
+  />
+  <Chart
+    chartType="heatMap"
+    chart={testChartForHeatMap}
   />
 </div>, document.getElementById('app'))
