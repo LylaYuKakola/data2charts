@@ -1,5 +1,5 @@
 import React from 'react'
-import echarts from 'echarts'
+import echarts from 'echarts/lib/echarts'
 import CSSModules from 'react-css-modules'
 import styles from './LineChart.css'
 import 'echarts/lib/chart/line'
