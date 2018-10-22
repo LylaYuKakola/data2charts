@@ -3,7 +3,7 @@ export function geoJSONFactory(originMap) {
     type: 'FeatureCollection',
     features: [],
   }
-  originMap.entries().forEach(([key, value]) => {
+  Array.from(originMap.entries()).forEach(([key, value]) => {
     result.features.push({
       type: 'Feature',
       properties: {
@@ -11,7 +11,7 @@ export function geoJSONFactory(originMap) {
       },
       geometry: {
         type: 'MultiPolygon',
-        coordinates: value,
+        coordinates: value.split('|').map(str => str.split(';').map(point => point.split(','))),
       },
     })
   })

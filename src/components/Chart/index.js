@@ -62,7 +62,7 @@ class Chart extends React.PureComponent {
     const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType))
 
     return (
-      <div styleName={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'}>
+      <div styleName={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'} style={{ zIndex: 999999999 }}>
         <OriginChartComponent
           type={chartType}
           chartData={chartData}

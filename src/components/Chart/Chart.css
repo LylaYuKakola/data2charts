@@ -23,7 +23,6 @@
 
 .chart-container-full-screen{
   position: fixed;
-  z-index: 987654321;
   display: flex;
   background-color: #ffffff;
   align-items: center;

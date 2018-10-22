@@ -50,9 +50,28 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
 
   // 热力图特殊处理
   if (chartType === 'heatMap') {
+    /* 地图需要两个参数：初始地区 和 数据 */
+    /* 初始地区暂时定为 adcode 但是一般不会给出这个，需要mapChart根据area（地区名）自己去查找adcode */
+
     const area = location
     const legendData = [defaultDimName]
-    return { title, area, legendData, originDataArr: data }
+
+    const originDataTree = Object.create(null)
+
+    data.forEach(row => {
+      let currentObject = originDataTree
+      const rowLenth = row.length
+      row.forEach((val, index) => {
+        if (rowLenth === (index + 1)) {
+          currentObject.value = `**|${val}|**`
+          return
+        }
+        currentObject[val] = currentObject[val] || Object.create(null)
+        currentObject = currentObject[val]
+      })
+    })
+
+    return { title, area, legendData, originDataTree }
   }
 
   // 判断data为空，则直接显示空数据
