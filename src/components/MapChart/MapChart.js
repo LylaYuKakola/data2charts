@@ -3,8 +3,6 @@ import echarts from 'echarts'
 import CSSModules from 'react-css-modules'
 import styles from './MapChart.css'
 import chartCss from '../../files/chartCss.json'
-import { geoJSONFactory } from './geoJSON'
-import provinces from '../../files/provinces.json'
 
 /**
  * 2018/10/17 重写renderChart
