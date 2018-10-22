@@ -5,6 +5,7 @@ import 'echarts/lib/component/geo'
 import 'echarts/lib/component/visualMap'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
+import 'echarts/lib/component/graphic'
 import CSSModules from 'react-css-modules'
 import styles from './MapChart.css'
 import chartCss from '../../files/chartCss.json'
@@ -20,6 +21,8 @@ import chartCss from '../../files/chartCss.json'
 const KEY = 'key=7f9bb5546562740fa4f1ca832126218e'
 const AMAPURL = `http://webapi.amap.com/maps?v=1.4.6&key=${KEY}`
 const AMAPUIURL = 'http://webapi.amap.com/ui/1.0/main.js?v=1.0.11'
+const CONSTQUERY = 's=rsv3&output=json&subdistrict=0&extensions=base'
+const AMAPAPIURL = 'https://restapi.amap.com/v3/config/district'
 
 class MapChart extends React.PureComponent {
   componentDidMount() {
@@ -35,6 +38,11 @@ class MapChart extends React.PureComponent {
 
   handleResize() {
     if (this.chart) this.chart.resize()
+  }
+
+  fetchPolyline = (area = '中国') => {
+    const requestURL = `${AMAPAPIURL}?${KEY}&${CONSTQUERY}&keywords=${encodeURIComponent(area)}`
+    return fetch(requestURL).then(res => res.json())
   }
 
   initChartOption() {
@@ -178,8 +186,9 @@ class MapChart extends React.PureComponent {
           .makeDataToChartOption()
         this.chart.hideLoading()
         this.chart.clear()
+        debugger
+        console.log(this.chartOption)
         this.chart.setOption(this.chartOption)
-        console.log(this)
       })
     })
   }
@@ -274,13 +283,28 @@ class MapChart extends React.PureComponent {
       })
       concatString += (crumb.name || '-无名称地址-')
     })
-
     this.chartOption.graphic = graphicForMapChart
     return this
   }
 
   renderChart() {
-    const { adcode } = this.props.data
+    const { area } = this.props.data
+
+    // this.fetchPolyline(area).then(res => {
+    //   let adcode = 100000
+    //   let name = '全国'
+    //   if (res && res.districts && res.districts[0]) {
+    //     adcode = Number(res.districts[0].adcode) || 100000
+    //     name = (!res.districts[0].name || res.districts[0].name === '中华人民共和国') ? '全国' : res.districts[0].name
+    //   }
+    //   return { name, adcode }
+    // }).then(res => {
+    //
+    // })
+
+    const adcode = adcode || 100000
+    const name = '全国'
+    const res = { name, adcode }
 
     const container = this.container
     echarts.registerTheme('data2charts', chartCss)
@@ -302,7 +326,7 @@ class MapChart extends React.PureComponent {
       }
     })
     this.currentLevel = 0
-    this.adcode = adcode || 100000
+    this.adcode = 100000
     this.geoData = { type: 'FeatureCollection', features: [] }
     this.breadcrumbData = [{ name: '全国', adcode: 100000 }]
     this.districtExplorer = null
