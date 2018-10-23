@@ -15,6 +15,8 @@ const testData = {
   }],
 }
 
+const columnNames = ['year', '型号', '渠道', '数值']
+
 const data = [
   ['2012', '型号001', '渠道1', Math.random() * 10],
   ['2013', '型号001', '渠道1', Math.random() * 10],
@@ -72,21 +74,25 @@ const testChart1 = {
 
 const testChart2 = {
   data,
+  columnNames,
   title: 'line图',
 }
 
 const testChart3 = {
   data,
+  columnNames,
   title: 'bar默认',
 }
 
 const testChart4 = {
   data,
+  columnNames,
   title: 'bar分组',
 }
 
 const testChartForPie = {
   data,
+  columnNames,
   chartType: 'pie',
   title: 'pie',
 }

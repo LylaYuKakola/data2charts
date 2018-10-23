@@ -18,12 +18,13 @@ class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
     const { chartType, chart, xColumn, yColumn, dimColumns, xOrY } = props
+    const columnNames = (chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
 
     // 计算配置面板中所需要的标签
     const npmOfDataColumn = (chart && chart.data && chart.data[0].length) ? chart.data[0].length : 0
     const allTags = Array(npmOfDataColumn).fill(0).map((val, index) => ({
       id: index,
-      column: index + 1,
+      column: columnNames[index] || `第${(index + 1)}列`,
     }))
     const isFullScreen = false
     this.state = { chartType, chart, xColumn, yColumn, dimColumns, xOrY, allTags, isFullScreen }

@@ -227,7 +227,7 @@ class SettingPanel extends React.PureComponent {
                   getAddTagFunc={fn => this.addTagToOtherTagCell = fn}
                   render={({ tag }) => (
                     <div style={tagStyle}>
-                      第{tag.column}列
+                      {tag.column}
                     </div>
                   )}
                 />
@@ -240,7 +240,7 @@ class SettingPanel extends React.PureComponent {
                   tags={xTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
-                      第{tag.column}列
+                      {tag.column}
                     </div>
                   )}
                   onChange={this.onXColumnChange}
@@ -252,7 +252,7 @@ class SettingPanel extends React.PureComponent {
                   tags={yTags}
                   render={({ tag }) => (
                     <div style={tagStyle}>
-                      第{tag.column}列
+                      {tag.column}
                     </div>
                   )}
                   onChange={this.onYColumnChange}
@@ -265,7 +265,7 @@ class SettingPanel extends React.PureComponent {
                     tags={dimColumnsTags}
                     render={({ tag }) => (
                       <div style={tagStyle}>
-                        第{tag.column}列
+                        {tag.column}
                       </div>
                     )}
                     onChange={this.onDimColumnsChange}
