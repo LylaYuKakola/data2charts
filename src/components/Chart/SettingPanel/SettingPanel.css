@@ -9,6 +9,21 @@
   right: 0;
   box-shadow: -5px -5px 10px rgba(0,0,0,0.1), 5px -5px 10px rgba(0,0,0,0.1);
   max-height: 350px;
+  transition: bottom 0.15s;
+}
+
+.setting-panel-close {
+  position: absolute;
+  display: flex;
+  z-index: 1000;
+  background-color: #fff;
+  height: 70%;
+  left: 0;
+  bottom: -100%;
+  right: 0;
+  box-shadow: -5px -5px 10px rgba(0,0,0,0.1), 5px -5px 10px rgba(0,0,0,0.1);
+  max-height: 350px;
+  transition: bottom 0.15s;
 }
 
 .setting-panel-close-btn {

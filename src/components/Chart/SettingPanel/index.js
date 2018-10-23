@@ -179,14 +179,15 @@ class SettingPanel extends React.PureComponent {
       xOrY,
     } = this.state
 
-    return visible ? (
+    return (
       <div>
+        {visible &&
         <div
           styleName="setting-mask"
           onClick={this.closeSettingPanel}
           ref={settingMask => this.settingMask = settingMask}
-        />
-        <div styleName="setting-panel">
+        /> }
+        <div styleName={visible ? 'setting-panel' : 'setting-panel-close'}>
           <div styleName="setting-panel-close-btn" onClick={this.closeSettingPanel}>
             <Icon type="down" theme="outlined" />
           </div>
@@ -275,7 +276,7 @@ class SettingPanel extends React.PureComponent {
           </div>
         </div>
       </div>
-    ) : null
+    )
   }
 }
 
