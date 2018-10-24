@@ -48,6 +48,20 @@ class PieChart extends React.PureComponent {
           fontSize: 15,
         },
       },
+      toolbox: {
+        feature: {
+          saveAsImage: {
+            name: `chart${new Date().getTime()}`,
+            backgroundColor: 'rgb(255,255,255)',
+            iconStyle: {
+              borderColor: 'rgb(36,154,210)',
+              textPosition: 'left',
+            },
+            pixelRatio: 2,
+          },
+        },
+        top: 'bottom',
+      },
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)',

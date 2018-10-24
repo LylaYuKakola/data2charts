@@ -5,6 +5,7 @@ import styles from './BarChart.css'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/grid'
 import 'echarts/lib/component/title'
+import 'echarts/lib/component/toolbox'
 import chartCss from '../../files/chartCss.json'
 
 class BarChart extends React.PureComponent {
@@ -129,6 +130,20 @@ class BarChart extends React.PureComponent {
             },
           },
         },
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {
+            name: `chart${new Date().getTime()}`,
+            backgroundColor: 'rgb(255,255,255)',
+            iconStyle: {
+              borderColor: 'rgb(36,154,210)',
+              textPosition: 'left',
+            },
+            pixelRatio: 2,
+          },
+        },
+        top: 'bottom',
       },
       tooltip: {
         trigger: 'axis',

@@ -6,6 +6,7 @@ import 'echarts/lib/chart/line'
 import 'echarts/lib/component/grid'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
+import 'echarts/lib/component/toolbox'
 import chartCss from '../../files/chartCss.json'
 import { lengendNotSelected } from './option'
 
@@ -123,6 +124,20 @@ class LineChart extends React.PureComponent {
         pageIconSize: [20, 20],
         data: legendData,
         selected: notSelected,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {
+            name: `chart${new Date().getTime()}`,
+            backgroundColor: 'rgb(255,255,255)',
+            iconStyle: {
+              borderColor: 'rgb(36,154,210)',
+              textPosition: 'left',
+            },
+            pixelRatio: 2,
+          },
+        },
+        top: 'bottom',
       },
       xAxis,
       yAxis,
