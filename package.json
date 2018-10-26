@@ -1,7 +1,7 @@
 {
   "name": "data2charts",
-  "version": "0.1.3",
-  "description": "二维数组数据转换echarts",
+  "version": "0.1.4",
+  "description": "二维数组数据转换echarts的react组件",
   "main": "lib/index.js",
   "files": [
     "build",
@@ -10,16 +10,14 @@
     "src"
   ],
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LylaYuKakola/data2charts"
+    "type": "git"
   },
   "homepage": "https://github.com/LylaYuKakola/data2charts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3000 --hot",
     "build": "webpack --config ./build/webpack.pub.config.js",
-    "prepublish": "npm run build",
-    "analyz": "NODE_ENV=production npm_config_report=true npm run build"
+    "prepublish": "npm run build"
   },
   "keywords": [
     "react",
