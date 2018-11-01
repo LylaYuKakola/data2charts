@@ -17,7 +17,7 @@ import SettingPanel from './SettingPanel'
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
-    const { chartType, chart, xColumn, yColumn, dimColumns, xOrY } = props
+    const { chartType, chart, xColumn, yColumn, dimColumns, xOrY, theme } = props
     const columnNames = (chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
 
     // 计算配置面板中所需要的标签
@@ -27,7 +27,7 @@ class Chart extends React.PureComponent {
       column: columnNames[index] || `第${(index + 1)}列`,
     }))
     const isFullScreen = false
-    this.state = { chartType, chart, xColumn, yColumn, dimColumns, xOrY, allTags, isFullScreen }
+    this.state = { chartType, chart, xColumn, yColumn, dimColumns, xOrY, allTags, isFullScreen, theme }
   }
 
   openSettingPanel = () => {
@@ -59,15 +59,16 @@ class Chart extends React.PureComponent {
   }
 
   renderChartPanel(chartData, isFullScreen) {
-    const { chartType, xOrY, xColumn, yColumn, dimColumns, allTags } = this.state
+    const { chartType, xOrY, xColumn, yColumn, dimColumns, allTags, theme } = this.state
     const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType))
 
     return (
-      <div styleName={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'} style={{ zIndex: 999999999 }}>
+      <div styleName={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'} style={{ zIndex: isFullScreen ? 999999999 : 1 }}>
         <OriginChartComponent
           type={chartType}
           chartData={chartData}
           isFullScreen={isFullScreen}
+          theme={theme}
         />
         {
           needSettingPanel && <div styleName="chart-setting-btn" onClick={this.openSettingPanel}>

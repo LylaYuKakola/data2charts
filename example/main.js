@@ -1,6 +1,7 @@
 // 是项目的JS打包入口文件
 import React from 'react'
 import ReactDOM from 'react-dom'
+import theme from './walden.json'
 
 // 导入项目的根组件
 import { OriginChartComponent, Chart } from '../src'

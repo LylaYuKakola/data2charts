@@ -307,7 +307,12 @@ class MapChart extends React.PureComponent {
     const res = { name, adcode }
 
     const container = this.container
-    echarts.registerTheme('data2charts', chartCss)
+    const { theme } = this.props
+    if (theme) {
+      echarts.registerTheme('data2charts', theme)
+    } else {
+      echarts.registerTheme('data2charts', chartCss)
+    }
     this.chart = echarts.init(container, 'data2charts')
     this.chart.on('click', event => {
       const { componentType } = event

@@ -46,7 +46,7 @@ class ChartContainer extends React.Component {
   }
 
   render() {
-    const { style: componentStyle, children } = this.props
+    const { style: componentStyle, children, theme } = this.props
     const { type, chartData, isFullScreen } = this.state
     let chart = null
     let hasData = true
@@ -62,20 +62,20 @@ class ChartContainer extends React.Component {
     } else {
       switch (type) {
         case 'line':
-          chart = <LineChart data={chartData} />
+          chart = <LineChart data={chartData} theme={theme} />
           break
         case 'bar':
         case 'stackedBar':
-          chart = <BarChart data={chartData} />
+          chart = <BarChart data={chartData} theme={theme} />
           break
         case 'pie':
-          chart = <PieChart data={chartData} />
+          chart = <PieChart data={chartData} theme={theme} />
           break
         case 'numeric':
-          chart = <SumChart data={chartData} />
+          chart = <SumChart data={chartData} theme={theme} />
           break
         case 'heatMap':
-          chart = <MapChart data={chartData} />
+          chart = <MapChart data={chartData} theme={theme} />
           break
         default:
           break
