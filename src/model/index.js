@@ -92,7 +92,12 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
     if (!yColumn && yColumn !== 0) {
       yColumn = xOrY !== 'x' ? 0 : data[0].length - 1
     }
-    dimColumns = (!dimColumns || !(dimColumns instanceof Array)) ? [] : dimColumns
+    if (!dimColumns || !(dimColumns instanceof Array)) {
+      dimColumns = []
+      for (let i = 1; i < data[0].length - 1; i++) {
+        dimColumns.push(i)
+      }
+    }
   }
 
   // 饼图，只需要配置xColumn和yColumn，xColumn为饼图数据的键，yColumn为饼图数据的值
