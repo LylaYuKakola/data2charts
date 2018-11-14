@@ -90,11 +90,14 @@ class MapChart extends React.PureComponent {
   }
 
   initDistrictExplorer() {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (this.districtExplorer) return resolve()
       window.AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
-        this.districtExplorer = new DistrictExplorer()
-        resolve()
+        if (DistrictExplorer) {
+          this.districtExplorer = new DistrictExplorer()
+          resolve()
+        }
+        reject()
       })
     })
   }
@@ -131,7 +134,7 @@ class MapChart extends React.PureComponent {
     let max = 0
     const data = features.map(feature => {
       const { properties } = feature
-      const value = dataMqp[properties.name] || '0'
+      const value = dataMqp[properties.name.substr(0, 2)] || '0'
       if (max < value) max = value
       return {
         name: properties.name,
