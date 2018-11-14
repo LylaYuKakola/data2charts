@@ -1,6 +1,6 @@
 {
   "name": "data2charts",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "二维数组数据转换echarts的react组件",
   "main": "lib/index.js",
   "files": [
@@ -15,7 +15,7 @@
   "homepage": "https://github.com/LylaYuKakola/data2charts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3000 --hot",
+    "start": "webpack-dev-server --config ./build/webpack.dev.config.js --open --port 3333 --hot",
     "build": "webpack --config ./build/webpack.pub.config.js",
     "prepublish": "npm run build"
   },

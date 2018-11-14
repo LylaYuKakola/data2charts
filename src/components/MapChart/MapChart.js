@@ -22,7 +22,7 @@ const KEY = 'key=7f9bb5546562740fa4f1ca832126218e'
 const AMAPURL = `http://webapi.amap.com/maps?v=1.4.6&key=${KEY}`
 const AMAPUIURL = 'http://webapi.amap.com/ui/1.0/main.js?v=1.0.11'
 const CONSTQUERY = 's=rsv3&output=json&subdistrict=0&extensions=base'
-const AMAPAPIURL = 'c'
+const AMAPAPIURL = 'https://restapi.amap.com/v3/config/district'
 
 class MapChart extends React.PureComponent {
   componentDidMount() {
@@ -41,6 +41,7 @@ class MapChart extends React.PureComponent {
   }
 
   fetchPolyline = (area = '中国') => {
+    if (area === '全国') area = '中国'
     const requestURL = `${AMAPAPIURL}?${KEY}&${CONSTQUERY}&keywords=${encodeURIComponent(area)}`
     return fetch(requestURL).then(res => res.json())
   }
@@ -186,7 +187,6 @@ class MapChart extends React.PureComponent {
           .makeDataToChartOption()
         this.chart.hideLoading()
         this.chart.clear()
-        debugger
         console.log(this.chartOption)
         this.chart.setOption(this.chartOption)
       })
@@ -288,65 +288,68 @@ class MapChart extends React.PureComponent {
   }
 
   renderChart() {
-    const { area } = this.props.data
+    const { area, canDrillDown } = this.props.data
 
-    // this.fetchPolyline(area).then(res => {
-    //   let adcode = 100000
-    //   let name = '全国'
-    //   if (res && res.districts && res.districts[0]) {
-    //     adcode = Number(res.districts[0].adcode) || 100000
-    //     name = (!res.districts[0].name || res.districts[0].name === '中华人民共和国') ? '全国' : res.districts[0].name
-    //   }
-    //   return { name, adcode }
-    // }).then(res => {
-    //
-    // })
+    this.fetchPolyline(area).then(res => {
+      let adcode = 100000
+      let name = '全国'
+      if (res && res.districts && res.districts[0]) {
+        adcode = Number(res.districts[0].adcode) || 100000
+        name = (!res.districts[0].name || res.districts[0].name === '中华人民共和国') ? '全国' : res.districts[0].name
+      }
+      return { name, adcode }
+    }).then(res => {
+      const adcode = res.adcode || 100000
+      const name = res.name || '全国'
+      // const res = { name, adcode }
 
-    const adcode = adcode || 100000
-    const name = '全国'
-    const res = { name, adcode }
+      const container = this.container
+      const { theme } = this.props
+      if (theme) {
+        echarts.registerTheme('data2charts', theme)
+      } else {
+        echarts.registerTheme('data2charts', chartCss)
+      }
+      this.chart = echarts.init(container, 'data2charts')
 
-    const container = this.container
-    const { theme } = this.props
-    if (theme) {
-      echarts.registerTheme('data2charts', theme)
-    } else {
-      echarts.registerTheme('data2charts', chartCss)
-    }
-    this.chart = echarts.init(container, 'data2charts')
-    this.chart.on('click', event => {
-      const { componentType } = event
-      let childrenNum = 0
+      // 点击下钻
+      if (canDrillDown) {
+        this.chart.on('click', event => {
+          const { componentType } = event
+          let childrenNum = 0
 
-      // 根据目标类型获取adocde和下级区域数量
-      if (componentType === 'series') {
-        this.adcode = event.data.adcode
-        childrenNum = event.data.childrenNum
+          // 根据目标类型获取adocde和下级区域数量
+          if (componentType === 'series') {
+            this.adcode = event.data.adcode
+            childrenNum = event.data.childrenNum
+          }
+
+          if (childrenNum > 0) {
+            this.loadChart()
+          } else {
+            console.log('无下级区域！')
+          }
+        })
       }
 
-      if (childrenNum > 0) {
-        this.loadChart()
+      this.currentLevel = 0
+      this.adcode = adcode
+      this.geoData = { type: 'FeatureCollection', features: [] }
+      this.breadcrumbData = [{ name, adcode }]
+      this.districtExplorer = null
+      this.chartOption = null
+
+      // 引入AMap和AMapUI
+      if (!window.AMapUI || !window.AMap) {
+        this.loadScript(AMAPURL).then(() => {
+          return this.loadScript(AMAPUIURL)
+        }).then(() => {
+          this.loadChart()
+        })
       } else {
-        console.log('无下级区域！')
+        this.loadChart()
       }
     })
-    this.currentLevel = 0
-    this.adcode = 100000
-    this.geoData = { type: 'FeatureCollection', features: [] }
-    this.breadcrumbData = [{ name: '全国', adcode: 100000 }]
-    this.districtExplorer = null
-    this.chartOption = null
-
-    // 引入AMap和AMapUI
-    if (!window.AMapUI || !window.AMap) {
-      this.loadScript(AMAPURL).then(() => {
-        return this.loadScript(AMAPUIURL)
-      }).then(() => {
-        this.loadChart()
-      })
-    } else {
-      this.loadChart()
-    }
   }
 
   render() {

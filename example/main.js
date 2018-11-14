@@ -43,8 +43,8 @@ const data = [
   ['2015', '型号001', '渠道2', Math.random() * 10],
   ['2016', '型号001', '渠道2', Math.random() * 10],
   ['2017', '型号001', '渠道2', Math.random() * 10],
-  ['2018', '型号001', '渠道2', -Math.random() * 10],
-  ['2019', '型号001', '渠道2', 0],
+  ['2018', '型号001', '渠道2', String(-Math.random() * 10)],
+  ['2019', '型号001', '渠道2', '0'],
   ['2020', '型号001', '渠道2', 0],
   ['2012', '型号002', '渠道2', Math.random() * 10],
   ['2013', '型号002', '渠道2', Math.random() * 10],
@@ -86,7 +86,6 @@ const testChart3 = {
 
 const testChart4 = {
   data,
-  columnNames,
   title: 'bar分组',
 }
 
@@ -101,6 +100,7 @@ const testChartForHeatMap = {
   data: dataForHeatMap,
   chartType: 'heatMap',
   title: 'heatMap',
+  canDrillDown: true,
 }
 
 const testChartForSum = {

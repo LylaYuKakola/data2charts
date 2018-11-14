@@ -68,7 +68,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
       })
     })
 
-    return { title, area, legendData, originDataTree }
+    return { title, area, legendData, originDataTree, canDrillDown: chart.canDrillDown }
   }
 
   // 判断data为空，则直接显示空数据

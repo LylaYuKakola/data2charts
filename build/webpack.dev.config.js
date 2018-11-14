@@ -5,7 +5,7 @@ module.exports = {
   entry: path.join(__dirname, '../example/main.js'),
   devtool: 'cheap-module-eval-source-map',
   output: {
-    path: path.join(__dirname, '../dist'),
+    path: path.join(__dirname, '../disHt'),
     filename: 'bundle.js',
   },
   plugins: [ // 插件
