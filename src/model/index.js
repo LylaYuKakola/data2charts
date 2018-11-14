@@ -40,7 +40,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   // numeric 只显示值
   if (chartType === 'numeric') {
     let value
-    if (!data || !data[0] || !data[0][0]) {
+    if (!data || !data[0] || (!data[0][0] && Number(data[0][0]) !== 0)) {
       value = '--'
     } else {
       value = String(data[0][0]).includes('%') > -1 ? data[0][0] : Number(data[0][0])
@@ -50,9 +50,6 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
 
   // 热力图特殊处理
   if (chartType === 'heatMap') {
-    /* 地图需要两个参数：初始地区 和 数据 */
-    /* 初始地区暂时定为 adcode 但是一般不会给出这个，需要mapChart根据area（地区名）自己去查找adcode */
-
     const area = location
     const legendData = [defaultDimName]
 
@@ -153,7 +150,8 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
     sourceData.push({
       name: defaultDimName,
       data: baseLineArr.map(name => {
-        const value = dataMap.get(name) || 0
+        let value = dataMap.get(name)
+        value = (!value && value !== 0) ? '-' : value
         if (chartType === 'pie') {
           return { name, value }
         }
@@ -178,7 +176,9 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
       sourceData.push({
         name: dim,
         data: baseLineArr.map(bLineData => {
-          return dataMap.get(bLineData + dim) || 0
+          let value = dataMap.get(bLineData + dim)
+          value = (!value && value !== 0) ? '-' : value
+          return value
         }),
       })
     })
