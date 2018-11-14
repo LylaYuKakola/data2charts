@@ -22,7 +22,7 @@ const KEY = 'key=7f9bb5546562740fa4f1ca832126218e'
 const AMAPURL = `http://webapi.amap.com/maps?v=1.4.6&key=${KEY}`
 const AMAPUIURL = 'http://webapi.amap.com/ui/1.0/main.js?v=1.0.11'
 const CONSTQUERY = 's=rsv3&output=json&subdistrict=0&extensions=base'
-const AMAPAPIURL = 'https://restapi.amap.com/v3/config/district'
+const AMAPAPIURL = 'c'
 
 class MapChart extends React.PureComponent {
   componentDidMount() {
