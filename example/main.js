@@ -48,7 +48,6 @@ const data = [
   ['2020', '型号001', '渠道2', 0],
   ['2012', '型号002', '渠道2', Math.random() * 10],
   ['2013', '型号002', '渠道2', Math.random() * 10],
-  ['2014', '型号002', '渠道2', -Math.random() * 10],
   ['2015', '型号002', '渠道2', Math.random() * 10],
   ['2016', '型号002', '渠道2', Math.random() * 10],
   ['2017', '型号002', '渠道2', Math.random() * 10],
@@ -130,6 +129,7 @@ ReactDOM.render(<div>
     xColumn={0}
     yColumn={3}
     dimColumns={[1, 2]}
+    needSettingPanel
   />
   <hr />
   <p>y轴为基准line增加DimColumns配置</p>
@@ -137,6 +137,7 @@ ReactDOM.render(<div>
     chartType="line"
     xOrY="y"
     chart={testChart2}
+    needSettingPanel
   />
   <hr />
   <p>y轴为基准line增加DimColumns配置</p>
@@ -147,6 +148,7 @@ ReactDOM.render(<div>
     xColumn={3}
     yColumn={0}
     dimColumns={[1, 2]}
+    needSettingPanel
   />
   <hr />
   <p>x轴为基准bar默认配置(默认排序)</p>
@@ -163,6 +165,7 @@ ReactDOM.render(<div>
     xColumn={3}
     yColumn={0}
     dimColumns={[1, 2]}
+    needSettingPanel
   />
   <hr />
   <p>饼图</p>
@@ -171,6 +174,7 @@ ReactDOM.render(<div>
     chart={testChartForPie}
     xColumn={0}
     yColumn={3}
+    needSettingPanel
   />
   <hr />
   <p>numreic</p>
