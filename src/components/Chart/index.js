@@ -14,11 +14,16 @@ import SettingPanel from './SettingPanel'
  * 1. 是否需要从外部修改
  * 2. 从外部修改是否只提供一个api方法方便组件状态管理（影响组件扩展性）
  */
+
+/**
+ * @param chartType 图表类型，包含：
+ */
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
     const { chartType, chart, xColumn, yColumn, dimColumns, xOrY, theme } = props
-    const columnNames = (chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
+    const columnNames =
+      (chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
 
     // 计算配置面板中所需要的标签
     const npmOfDataColumn = (chart && chart.data && chart.data[0].length) ? chart.data[0].length : 0
@@ -27,7 +32,17 @@ class Chart extends React.PureComponent {
       column: columnNames[index] || `第${(index + 1)}列`,
     }))
     const isFullScreen = false
-    this.state = { chartType, chart, xColumn, yColumn, dimColumns, xOrY, allTags, isFullScreen, theme }
+    this.state = {
+      chartType,
+      chart,
+      xColumn,
+      yColumn,
+      dimColumns,
+      xOrY,
+      allTags,
+      isFullScreen,
+      theme,
+    }
   }
 
   openSettingPanel = () => {
@@ -60,7 +75,7 @@ class Chart extends React.PureComponent {
 
   renderChartPanel(chartData, isFullScreen) {
     const { chartType, xOrY, xColumn, yColumn, dimColumns, allTags, theme } = this.state
-    const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType))
+    const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType)) && this.props.needSettingPanel
 
     return (
       <div styleName={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'} style={{ zIndex: isFullScreen ? 999999999 : 1 }}>
