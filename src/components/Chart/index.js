@@ -82,6 +82,12 @@ class Chart extends React.PureComponent {
     })
   }
 
+  updateChartData = data => {
+    this.setState({
+      chart: { ...this.state.chart, data },
+    })
+  }
+
   closeSettingPanelHandler = option => {
     this.setState(option)
   }
