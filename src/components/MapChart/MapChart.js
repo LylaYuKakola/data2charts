@@ -83,7 +83,7 @@ class MapChart extends React.PureComponent {
         text: ['高', '低'], // 文本，默认为数值文本
         calculable: false,
         inRange: {
-          color: ['#f5f5f5', '#ffa800', '#ff4d00'],
+          color: ['#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'],
         },
       },
       series: [],
