@@ -16,12 +16,34 @@ import SettingPanel from './SettingPanel'
  */
 
 /**
- * @param chartType 图表类型，包含：
+ * 带有配置面板的图表组件（扩展自originChartComponent）
+ *
+ * @param chart {Object} 图表对象 包含以下（参考 ./model/index ）
+ *   |----- chartType       {String}  图表类型，包含：line、bar、pie、numeric、heatMap
+ *   |----- data            {Array}   数据，二维数组
+ *   |----- title           {String}  标题的文字内容
+ *   |----- description     {String}  标题的tooltip显示内容，用来丰富chart的描述
+ *   |----- location        {String}  针对 heatMap 的特殊字段，当前map的城市名称
+ *   |----- specialAxis     {Array}   针对 直角坐标系 的特殊字段，特殊的基轴的数据，为了补全因数据补全导致的基轴坐标获取不足
+ *   |----- defaultDimName  {String}  针对 直角坐标系 的特殊字段，默认的维度名（当二维数组中只有两列的时候使用）
+ *   |----- specialScaleArr {Array}   针对 直角坐标系 的特殊字段，双轴时描述第二个数据轴的数组
+ *
+ * @param xOrY              {String}  x轴为基轴还是y轴为基轴（针对bar和line）'x' / 'y'
+ * @param xColumn           {Number}  x轴对应的列数，xOrY为 'x' 时默认第一列，'y' 时默认最后一列
+ * @param yColumn           {Number}  y轴对应的列数，xOrY为 'y' 时默认第一列，'x' 时默认最后一列
+ * @param dimColumns        {Array}   做分组合并的列数集合，默认为中间几列
+ * @param theme             {Object}  样式主题的扩展
+ * @param componentStyle    {Object}  组件的样式，作用在图表容器上（originChartComponent的配置项）
+ * @param extraChartOption  {Object}  组件的样式，作用在图表容器上（originChartComponent的配置项）
+ * @param children          {Object}  toolbar内容，作用在图表容器上（originChartComponent的配置项）
  */
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
-    const { chartType, chart, xColumn, yColumn, dimColumns, xOrY, theme } = props
+    const {
+      chart, xColumn, yColumn, dimColumns,
+      xOrY, theme, extraChartOption, componentStyle,
+    } = props
     const columnNames =
       (chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
 
@@ -33,7 +55,7 @@ class Chart extends React.PureComponent {
     }))
     const isFullScreen = false
     this.state = {
-      chartType,
+      chartType: chart.chartType,
       chart,
       xColumn,
       yColumn,
@@ -42,6 +64,8 @@ class Chart extends React.PureComponent {
       allTags,
       isFullScreen,
       theme,
+      extraChartOption,
+      componentStyle,
     }
   }
 
@@ -74,7 +98,10 @@ class Chart extends React.PureComponent {
   }
 
   renderChartPanel(chartData, isFullScreen) {
-    const { chartType, xOrY, xColumn, yColumn, dimColumns, allTags, theme } = this.state
+    const {
+      chartType, xOrY, xColumn, yColumn, componentStyle,
+      dimColumns, allTags, theme, extraChartOption,
+    } = this.state
     const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType)) && this.props.needSettingPanel
 
     return (
@@ -83,8 +110,12 @@ class Chart extends React.PureComponent {
           type={chartType}
           chartData={chartData}
           isFullScreen={isFullScreen}
+          componentStyle={componentStyle}
+          extraChartOption={extraChartOption}
           theme={theme}
-        />
+        >
+          {this.props.children}
+        </OriginChartComponent>
         {
           needSettingPanel && <div styleName="chart-setting-btn" onClick={this.openSettingPanel}>
             <Icon type="setting" />

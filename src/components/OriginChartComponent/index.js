@@ -24,6 +24,9 @@ function isChartEmpty(data, type) {
   return false
 }
 
+/**
+ * 原始的chart的组件，主要实现react
+ */
 class ChartContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -46,39 +49,39 @@ class ChartContainer extends React.Component {
   }
 
   render() {
-    const { style: componentStyle, children, theme } = this.props
+    const { componentStyle, children, theme, extraChartOption } = this.props
     const { type, chartData, isFullScreen } = this.state
     let chart = null
     let hasData = true
+    const nullTextStyle = {
+      textAlign: 'center',
+      padding: 16,
+      fontSize: 22,
+      color: '#999',
+    }
     if (isChartEmpty(chartData, type)) {
       hasData = false
-      const style = {
-        textAlign: 'center',
-        padding: 16,
-        fontSize: 22,
-        color: '#999',
-      }
-      chart = <div style={style}>暂无数据</div>
+      chart = <div style={nullTextStyle}>暂无数据</div>
     } else {
       switch (type) {
         case 'line':
-          chart = <LineChart data={chartData} theme={theme} />
+          chart = <LineChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'bar':
         case 'stackedBar':
-          chart = <BarChart data={chartData} theme={theme} />
+          chart = <BarChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'pie':
-          chart = <PieChart data={chartData} theme={theme} />
+          chart = <PieChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'numeric':
-          chart = <SumChart data={chartData} theme={theme} />
+          chart = <SumChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'heatMap':
-          chart = <MapChart data={chartData} theme={theme} />
+          chart = <MapChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         default:
-          break
+          chart = <div style={nullTextStyle}>暂无 {type} 类型的图表</div>
       }
     }
     let containerStyle = {

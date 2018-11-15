@@ -7,6 +7,7 @@ import 'echarts/lib/component/grid'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/toolbox'
 import chartCss from '../../files/chartCss.json'
+import { deepCloneForChartOption } from '../../util'
 
 class BarChart extends React.PureComponent {
   constructor(props) {
@@ -43,7 +44,7 @@ class BarChart extends React.PureComponent {
 
   renderChart() {
     const dom = this.chart
-    const { theme } = this.props
+    const { theme, extraChartOption } = this.props
     if (theme) {
       echarts.registerTheme('data2charts', theme)
     } else {
@@ -230,7 +231,7 @@ class BarChart extends React.PureComponent {
           data: sourceData,
         }]
     }
-    myChart.setOption(option, true)
+    myChart.setOption(deepCloneForChartOption(option, extraChartOption), true)
     this.myChart = myChart
     window.addEventListener('resize', this.handleResize)
   }

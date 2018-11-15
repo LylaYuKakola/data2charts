@@ -8,6 +8,8 @@ import 'echarts/lib/component/legendScroll'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import chartCss from '../../files/chartCss.json'
+import { deepCloneForChartOption } from '../../util'
+
 
 class PieChart extends React.PureComponent {
   componentDidMount() {
@@ -36,7 +38,7 @@ class PieChart extends React.PureComponent {
 
   renderChart() {
     const dom = this.chart
-    const { theme } = this.props
+    const { theme, extraChartOption } = this.props
     if (theme) {
       echarts.registerTheme('data2charts', theme)
     } else {
@@ -91,7 +93,7 @@ class PieChart extends React.PureComponent {
         },
       })),
     }
-    myChart.setOption(option, true)
+    myChart.setOption(deepCloneForChartOption(option, extraChartOption), true)
     this.myChart = myChart
     window.addEventListener('resize', this.handleResize)
   }

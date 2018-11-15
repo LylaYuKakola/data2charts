@@ -72,20 +72,9 @@ const testChart1 = {
   chartType: 'line',
 }
 
-const testChart2 = {
-  data,
-  columnNames,
-  title: 'line图',
-}
-
-const testChart3 = {
-  data,
-  columnNames,
-  title: 'bar默认',
-}
-
 const testChart4 = {
   data,
+  chartType: 'bar',
   title: 'bar分组',
 }
 
@@ -93,20 +82,20 @@ const testChartForPie = {
   data,
   columnNames,
   chartType: 'pie',
-  title: 'pie',
+  title: 'pie+columnNames的演示',
 }
 
 const testChartForHeatMap = {
   data: dataForHeatMap,
   chartType: 'heatMap',
   title: 'heatMap',
-  canDrillDown: true,
+  canDrillDown: false,
 }
 
 const testChartForSum = {
   data: [[100000]],
   title: 'numeric',
-  description: '描述一下子',
+  description: '单指标的描述',
 }
 
 ReactDOM.render(<div>
@@ -118,13 +107,11 @@ ReactDOM.render(<div>
   <hr />
   <p>x轴为基准line默认配置</p>
   <Chart
-    chartType="line"
     chart={testChart1}
   />
   <hr />
   <p>x轴为基准line增加DimColumns配置</p>
   <Chart
-    chartType="line"
     chart={testChart1}
     xColumn={0}
     yColumn={3}
@@ -134,32 +121,6 @@ ReactDOM.render(<div>
   <hr />
   <p>y轴为基准line增加DimColumns配置</p>
   <Chart
-    chartType="line"
-    xOrY="y"
-    chart={testChart2}
-    needSettingPanel
-  />
-  <hr />
-  <p>y轴为基准line增加DimColumns配置</p>
-  <Chart
-    chartType="line"
-    xOrY="y"
-    chart={testChart2}
-    xColumn={3}
-    yColumn={0}
-    dimColumns={[1, 2]}
-    needSettingPanel
-  />
-  <hr />
-  <p>x轴为基准bar默认配置(默认排序)</p>
-  <Chart
-    chartType="bar"
-    chart={testChart3}
-  />
-  <hr />
-  <p>y轴为基准line增加DimColumns配置</p>
-  <Chart
-    chartType="bar"
     xOrY="y"
     chart={testChart4}
     xColumn={3}
@@ -170,18 +131,12 @@ ReactDOM.render(<div>
   <hr />
   <p>饼图</p>
   <Chart
-    chartType="pie"
     chart={testChartForPie}
     xColumn={0}
     yColumn={3}
     needSettingPanel
   />
   <hr />
-  <p>numreic</p>
-  <Chart
-    chartType="numeric"
-    chart={testChartForSum}
-  />
   <Chart
     chartType="heatMap"
     chart={testChartForHeatMap}

@@ -9,6 +9,8 @@ import 'echarts/lib/component/graphic'
 import CSSModules from 'react-css-modules'
 import styles from './MapChart.css'
 import chartCss from '../../files/chartCss.json'
+import { deepCloneForChartOption } from '../../util'
+
 
 /**
  * 2018/10/17 重写renderChart
@@ -120,7 +122,7 @@ class MapChart extends React.PureComponent {
       const reg = /\*\*\|(\S+?)\|\*\*/g
       let sum = 0
       objectStr.match(reg).forEach(val => sum += (Number(val.slice(3, val.length - 3)) || 0))
-      dataMqp[childKey] = sum
+      dataMqp[childKey.substr(0, 2)] = sum
     })
 
     this.dataMqp = dataMqp
@@ -134,6 +136,7 @@ class MapChart extends React.PureComponent {
     let max = 0
     const data = features.map(feature => {
       const { properties } = feature
+      debugger
       const value = dataMqp[properties.name.substr(0, 2)] || '0'
       if (max < value) max = value
       return {
@@ -191,7 +194,7 @@ class MapChart extends React.PureComponent {
         this.chart.hideLoading()
         this.chart.clear()
         console.log(this.chartOption)
-        this.chart.setOption(this.chartOption)
+        this.chart.setOption(deepCloneForChartOption(this.chartOption, this.props.extraChartOption), true)
       })
     })
   }
@@ -286,7 +289,8 @@ class MapChart extends React.PureComponent {
       })
       concatString += (crumb.name || '-无名称地址-')
     })
-    this.chartOption.graphic = graphicForMapChart
+    const { canDrillDown } = this.props.data
+    this.chartOption.graphic = canDrillDown ? graphicForMapChart : []
     return this
   }
 
@@ -304,8 +308,6 @@ class MapChart extends React.PureComponent {
     }).then(res => {
       const adcode = res.adcode || 100000
       const name = res.name || '全国'
-      // const res = { name, adcode }
-
       const container = this.container
       const { theme } = this.props
       if (theme) {

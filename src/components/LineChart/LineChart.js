@@ -9,6 +9,7 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/toolbox'
 import chartCss from '../../files/chartCss.json'
 import { lengendNotSelected } from './option'
+import { deepCloneForChartOption } from '../../util'
 
 class LineChart extends React.PureComponent {
   componentDidMount() {
@@ -35,7 +36,7 @@ class LineChart extends React.PureComponent {
   }
   renderChart() {
     const dom = this.chart
-    const { theme } = this.props
+    const { theme, extraChartOption } = this.props
     if (theme) {
       echarts.registerTheme('data2charts', theme)
     } else {
@@ -99,8 +100,8 @@ class LineChart extends React.PureComponent {
       // option.series[1].yAxisIndex = 1
     }
 
-    let xAxis; let
-      yAxis
+    let xAxis
+    let yAxis
     if (xOrY === 'x') {
       xAxis = baseAxis
       yAxis = valueAxis
@@ -153,7 +154,7 @@ class LineChart extends React.PureComponent {
         }
       )),
     }
-    myChart.setOption(option, true)
+    myChart.setOption(deepCloneForChartOption(option, extraChartOption), true)
     this.myChart = myChart
     window.addEventListener('resize', this.handleResize)
   }
