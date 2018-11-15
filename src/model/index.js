@@ -18,7 +18,6 @@
 export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns) {
   /** ******************* chart对象需要满足以下几个属性 ****************** */
   /*  1. data（必要）二维数组 table数据格式 包含chart所需要的数据            */
-  /*  2. title（非必要）图表标题 @TODO 暂时无法处理复杂的title展示           */
   /*  3. location（非必要）地图类型时指示显示的省份地址                      */
   /*  4. specialAxis（非必要）直角坐标系图表时修复不完整的坐标值，一般为日期   */
   /*  5. description（非必要）numeric时描述当前的描述详情                   */
@@ -27,13 +26,12 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   /** ***************************************************************** */
   const {
     data,
-    title,
     location,
     specialAxis,
     description,
     defaultDimName,
     specialScaleArr,
-  } = { title: '', description: '', defaultDimName: '', ...chart }
+  } = { description: '', defaultDimName: '', ...chart }
 
   xOrY = xOrY || 'x'
 
@@ -45,7 +43,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
     } else {
       value = String(data[0][0]).includes('%') > -1 ? data[0][0] : Number(data[0][0])
     }
-    return { title, value, description }
+    return { value, description }
   }
 
   // 热力图特殊处理
@@ -68,7 +66,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
       })
     })
 
-    return { title, area, legendData, originDataTree, canDrillDown: chart.canDrillDown }
+    return { area, legendData, originDataTree, canDrillDown: chart.canDrillDown }
   }
 
   // 判断data为空，则直接显示空数据
@@ -190,7 +188,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   }
 
   if (chartType === 'pie') {
-    return { title, legendData: baseLineArr, sourceData }
+    return { legendData: baseLineArr, sourceData }
   }
 
   if (chartType === 'line') {
@@ -205,10 +203,10 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
         if (source.name.includes(valueAxisData0)) source.yAxisIndex = 0
         else source.yAxisIndex = 1
       })
-      return { title, legendData, baseAxisData, valueAxisData, sourceData, xOrY }
+      return { legendData, baseAxisData, valueAxisData, sourceData, xOrY }
     }
 
-    return { title, legendData, baseAxisData, sourceData, xOrY }
+    return { legendData, baseAxisData, sourceData, xOrY }
   }
 
   if (['bar', 'stackedBar'].includes(chartType)) {
@@ -230,7 +228,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
       })
     }
 
-    return { title, legendData, baseAxisData, sourceData, xOrY }
+    return { legendData, baseAxisData, sourceData, xOrY }
   }
 
   return {}

@@ -3,22 +3,22 @@
   overflow: hidden;
 }
 
-.chart-setting-btn{
+.chart-toolbar {
   position: absolute;
-  right: 40px;
   top: 10px;
-  font-size: 18px;
-  color: #2d97c9;
-  cursor: pointer;
+  right: 20px;
 }
 
-.fullscreen-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.chart-setting-btn, .fullscreen-btn{
+  float: right;
   font-size: 18px;
-  cursor: pointer;
   color: #2d97c9;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.chart-toolbar-extra{
+  float: right;
 }
 
 .chart-container-full-screen{

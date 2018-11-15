@@ -49,7 +49,7 @@ class ChartContainer extends React.Component {
   }
 
   render() {
-    const { componentStyle, children, theme, extraChartOption } = this.props
+    const { componentStyle, children, theme, extraChartOption, title } = this.props
     const { type, chartData, isFullScreen } = this.state
     let chart = null
     let hasData = true
@@ -85,26 +85,25 @@ class ChartContainer extends React.Component {
       }
     }
     let containerStyle = {
-      height: 300,
-      padding: 20,
+      height: 350,
+      padding: '0 20px 20px 20px',
       ...componentStyle,
     }
-    if (type === 'numeric' || type === 'board' || type === 'multiNumeric' || type === 'bmapScatter' || !hasData) {
+    if (type === 'numeric' || !hasData) {
       containerStyle = null
     }
     return (
       <div
-        styleName={!isFullScreen ? 'chart-wrapper' : 'chart-fullscreen-container'}
+        styleName={!isFullScreen ? 'chart-wrapper' : 'chart-wrapper-fullscreen'}
         className="border-top-1px"
-        style={!isFullScreen ? containerStyle : {}}
         ref={el => { this.wrapper = el }}
       >
-        {chart}
-        {
-          children && (
-            <div styleName="chart-toolbar" ref={t => this.toolbar = t}>{children}</div>
-          )
-        }
+        {title}
+        <div
+          style={!isFullScreen ? containerStyle : { flex: 1 }}
+        >
+          {chart}
+        </div>
       </div>
     )
   }

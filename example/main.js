@@ -127,7 +127,10 @@ ReactDOM.render(<div>
     yColumn={0}
     dimColumns={[1, 2]}
     needSettingPanel
-  />
+    title={<div style={{ height: 100, padding: '1em' }}>123123123123</div>}
+  >
+    <div>123123</div>
+  </Chart>
   <hr />
   <p>饼图</p>
   <Chart

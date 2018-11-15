@@ -21,7 +21,6 @@ import SettingPanel from './SettingPanel'
  * @param chart {Object} 图表对象 包含以下（参考 ./model/index ）
  *   |----- chartType       {String}  图表类型，包含：line、bar、pie、numeric、heatMap
  *   |----- data            {Array}   数据，二维数组
- *   |----- title           {String}  标题的文字内容
  *   |----- description     {String}  标题的tooltip显示内容，用来丰富chart的描述
  *   |----- location        {String}  针对 heatMap 的特殊字段，当前map的城市名称
  *   |----- specialAxis     {Array}   针对 直角坐标系 的特殊字段，特殊的基轴的数据，为了补全因数据补全导致的基轴坐标获取不足
@@ -36,12 +35,13 @@ import SettingPanel from './SettingPanel'
  * @param componentStyle    {Object}  组件的样式，作用在图表容器上（originChartComponent的配置项）
  * @param extraChartOption  {Object}  组件的样式，作用在图表容器上（originChartComponent的配置项）
  * @param children          {Object}  toolbar内容，作用在图表容器上（originChartComponent的配置项）
+ * @param title             {Object}  ReactDom，显示为chart面板的title，作用在图表容器上（originChartComponent的配置项）
  */
 class Chart extends React.PureComponent {
   constructor(props) {
     super(props)
     const {
-      chart, xColumn, yColumn, dimColumns,
+      chart, xColumn, yColumn, dimColumns, title,
       xOrY, theme, extraChartOption, componentStyle,
     } = props
     const columnNames =
@@ -66,6 +66,7 @@ class Chart extends React.PureComponent {
       theme,
       extraChartOption,
       componentStyle,
+      title,
     }
   }
 
@@ -100,7 +101,7 @@ class Chart extends React.PureComponent {
   renderChartPanel(chartData, isFullScreen) {
     const {
       chartType, xOrY, xColumn, yColumn, componentStyle,
-      dimColumns, allTags, theme, extraChartOption,
+      dimColumns, allTags, theme, extraChartOption, title,
     } = this.state
     const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType)) && this.props.needSettingPanel
 
@@ -113,24 +114,30 @@ class Chart extends React.PureComponent {
           componentStyle={componentStyle}
           extraChartOption={extraChartOption}
           theme={theme}
-        >
-          {this.props.children}
-        </OriginChartComponent>
-        {
-          needSettingPanel && <div styleName="chart-setting-btn" onClick={this.openSettingPanel}>
-            <Icon type="setting" />
-          </div>
-        }
-        {
-          !isFullScreen && <div styleName="fullscreen-btn">
-            <Icon type="fullscreen" theme="outlined" onClick={this.openFullScreenHandler} />
-          </div>
-        }
-        {
-          isFullScreen && <div styleName="fullscreen-btn">
-            <Icon type="fullscreen-exit" theme="outlined" onClick={this.closeFullScreenHandler} />
-          </div>
-        }
+          title={title}
+        />
+        <div styleName="chart-toolbar">
+          {
+            !isFullScreen && <div styleName="fullscreen-btn">
+              <Icon type="fullscreen" theme="outlined" onClick={this.openFullScreenHandler} />
+            </div>
+          }
+          {
+            isFullScreen && <div styleName="fullscreen-btn">
+              <Icon type="fullscreen-exit" theme="outlined" onClick={this.closeFullScreenHandler} />
+            </div>
+          }
+          {
+            needSettingPanel && <div styleName="chart-setting-btn" onClick={this.openSettingPanel}>
+              <Icon type="setting" />
+            </div>
+          }
+          {
+            this.props.children && (
+              <div styleName="chart-toolbar-extra">{ this.props.children }</div>
+            )
+          }
+        </div>
         {
           needSettingPanel && <SettingPanel
             allTags={allTags}
