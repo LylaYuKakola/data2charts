@@ -34,6 +34,7 @@ class ChartContainer extends React.Component {
       isFullScreen: props.isFullScreen,
       type: props.type || '',
       chartData: props.chartData || '',
+      extraChartOption: props.extraChartOption,
     }
   }
 
@@ -41,6 +42,7 @@ class ChartContainer extends React.Component {
     this.setState({
       type: changes.type,
       chartData: changes.chartData,
+      extraChartOption: changes.extraChartOption,
     })
   }
 
@@ -49,8 +51,8 @@ class ChartContainer extends React.Component {
   }
 
   render() {
-    const { componentStyle, theme, extraChartOption, title } = this.props
-    const { type, chartData, isFullScreen } = this.state
+    const { componentStyle, theme, title } = this.props
+    const { type, chartData, isFullScreen, extraChartOption } = this.state
     let chart = null
     let hasData = true
     const nullTextStyle = {

@@ -159,6 +159,8 @@ const extra = {
   }],
 }
 
+let a = null
+
 ReactDOM.render(<div>
   <p>原始配置</p>
   <OriginChartComponent
@@ -209,6 +211,10 @@ ReactDOM.render(<div>
     chart={{
       chartType: 'bar',
     }}
+    ref={e => a = e}
     extraChartOption={extra}
   />
+  <div onClick={event => a.setState({ extraChartOption: { ...extra, title: { text: 'asd' } } })}>
+    12312312
+  </div>
 </div>, document.getElementById('app'))

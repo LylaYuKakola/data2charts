@@ -12,6 +12,14 @@ import { lengendNotSelected } from './option'
 import { deepCloneForChartOption } from '../../util'
 
 class LineChart extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: props.data,
+      extraChartOption: props.extraChartOption,
+    }
+  }
+
   componentDidMount() {
     this.renderChart()
   }
@@ -19,6 +27,7 @@ class LineChart extends React.PureComponent {
   componentWillReceiveProps(changes) {
     this.setState({
       data: changes.data,
+      extraChartOption: changes.extraChartOption,
     })
   }
 
@@ -36,14 +45,14 @@ class LineChart extends React.PureComponent {
   }
   renderChart() {
     const dom = this.chart
-    const { theme, extraChartOption } = this.props
+    const { extraChartOption, data } = this.state
+    const { theme } = this.props
     if (theme) {
       echarts.registerTheme('data2charts', theme)
     } else {
       echarts.registerTheme('data2charts', chartCss)
     }
     let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
-    const data = this.props.data
     const notSelected = {}
     lengendNotSelected.forEach(item => {
       notSelected[item] = false

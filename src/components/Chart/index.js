@@ -70,6 +70,13 @@ class Chart extends React.PureComponent {
     }
   }
 
+  componentWillReceiveProps(changes) {
+    this.setState({
+      extraChartOption: changes.extraChartOption || this.state.extraChartOption,
+      chart: changes.chart || this.state.chart,
+    })
+  }
+
   openSettingPanel = () => {
     const { xOrY, xColumn, yColumn, dimColumns, allTags, chartType } = this.state
     this.settingPanel.openSettingPanel({

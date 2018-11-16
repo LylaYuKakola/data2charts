@@ -12,6 +12,14 @@ import { deepCloneForChartOption } from '../../util'
 
 
 class PieChart extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: props.data,
+      extraChartOption: props.extraChartOption,
+    }
+  }
+
   componentDidMount() {
     this.renderChart()
   }
@@ -19,6 +27,7 @@ class PieChart extends React.PureComponent {
   componentWillReceiveProps(changes) {
     this.setState({
       data: changes.data,
+      extraChartOption: changes.extraChartOption,
     })
   }
 
@@ -38,14 +47,14 @@ class PieChart extends React.PureComponent {
 
   renderChart() {
     const dom = this.chart
-    const { theme, extraChartOption } = this.props
+    const { data, extraChartOption } = this.state
+    const { theme } = this.props
     if (theme) {
       echarts.registerTheme('data2charts', theme)
     } else {
       echarts.registerTheme('data2charts', chartCss)
     }
     let myChart = echarts.init(dom,'data2charts') // eslint-disable-line
-    const data = this.props.data
     const option = {
       title: {
         text: data.title || '',

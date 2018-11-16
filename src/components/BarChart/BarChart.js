@@ -14,6 +14,7 @@ class BarChart extends React.PureComponent {
     super(props)
     this.state = {
       data: props.data,
+      extraChartOption: props.extraChartOption,
     }
   }
 
@@ -24,6 +25,7 @@ class BarChart extends React.PureComponent {
   componentWillReceiveProps(changes) {
     this.setState({
       data: changes.data,
+      extraChartOption: changes.extraChartOption,
     })
   }
 
@@ -44,14 +46,14 @@ class BarChart extends React.PureComponent {
 
   renderChart() {
     const dom = this.chart
-    const { theme, extraChartOption } = this.props
+    const { theme } = this.props
+    const { extraChartOption, data } = this.state
     if (theme) {
       echarts.registerTheme('data2charts', theme)
     } else {
       echarts.registerTheme('data2charts', chartCss)
     }
     let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
-    const data = this.state.data
 
     const {
       title,
