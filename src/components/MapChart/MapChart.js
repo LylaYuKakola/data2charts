@@ -136,7 +136,6 @@ class MapChart extends React.PureComponent {
     let max = 0
     const data = features.map(feature => {
       const { properties } = feature
-      debugger
       const value = dataMqp[properties.name.substr(0, 2)] || '0'
       if (max < value) max = value
       return {

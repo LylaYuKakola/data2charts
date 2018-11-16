@@ -45,7 +45,7 @@ class Chart extends React.PureComponent {
       xOrY, theme, extraChartOption, componentStyle,
     } = props
     const columnNames =
-      (chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
+      (chart && chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
 
     // 计算配置面板中所需要的标签
     const npmOfDataColumn = (chart && chart.data && chart.data[0].length) ? chart.data[0].length : 0

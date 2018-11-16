@@ -98,6 +98,67 @@ const testChartForSum = {
   description: '单指标的描述',
 }
 
+const extra = {
+  title: {
+    text: '{hl|20181114}->{hl|20181113}的{hl|出货量}降低原因重要性排序\n{lt|＊橙色代表子群变化趋势为增长，蓝色代表子群变化趋势为下降}',
+    subtext: '{cn|}',
+    padding: [4, 0],
+    textStyle: {
+      fontWeight: 'normal',
+      fontSize: 15,
+      lineHeight: 20,
+      rich: {
+        hl: {
+          color: '#1890ff',
+          fontSize: 15,
+        },
+        lt: {
+          color: '#9d9d9d',
+          fontSize: 13,
+        },
+      },
+    },
+    subtextStyle: {
+      lineHeight: 20,
+      verticalAlign: 'center',
+      rich: {
+        cn: {
+          align: 'center',
+          color: '#ff6700',
+        },
+      },
+    },
+  },
+  grid: {
+    left: '16%',
+  },
+  yAxis: {
+    data: ['分销 广东 小米8', '县级授权店 小米MIX3', '分销 广东', '小米商城 广东 小米MIX3', '县级授权店', '电商渠道 福建 小米8青春', '电商渠道', '分销', '电商渠道 广东 小米8', '电商渠道 山东 红米6A', '小米商城', '运营商', '电商渠道 广东 小米8青春', '线下KA', '电商渠道 福建', '电商渠道 山东', '电商渠道 广东', '总量'],
+    axisLabel: {
+      margin: 4,
+      textStyle: {},
+    },
+  },
+  xAxis: {
+    type: 'value',
+    axisLabel: {},
+  },
+  series: [{
+    type: 'bar',
+    barMaxWidth: 40,
+    data: ['-0.2004', '-0.2055', '-0.2452', '0.2806', '-0.3253', '-0.3731', '0.3948', '-0.4138', '0.4665', '0.5160', '0.6103', '-0.6182', '0.6701', '-0.7094', '-0.8005', '0.8391', '1.9495', '-1'],
+    itemStyle: {
+      normal: {},
+    },
+    label: {
+      normal: {
+        show: true,
+        position: 'right',
+      },
+    },
+  }],
+}
+
 ReactDOM.render(<div>
   <p>原始配置</p>
   <OriginChartComponent
@@ -143,5 +204,11 @@ ReactDOM.render(<div>
   <Chart
     chartType="heatMap"
     chart={testChartForHeatMap}
+  />
+  <Chart
+    chart={{
+      chartType: 'bar',
+    }}
+    extraChartOption={extra}
   />
 </div>, document.getElementById('app'))

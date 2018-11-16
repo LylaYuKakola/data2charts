@@ -49,7 +49,7 @@ class ChartContainer extends React.Component {
   }
 
   render() {
-    const { componentStyle, children, theme, extraChartOption, title } = this.props
+    const { componentStyle, theme, extraChartOption, title } = this.props
     const { type, chartData, isFullScreen } = this.state
     let chart = null
     let hasData = true
@@ -59,7 +59,7 @@ class ChartContainer extends React.Component {
       fontSize: 22,
       color: '#999',
     }
-    if (isChartEmpty(chartData, type)) {
+    if (isChartEmpty(chartData, type) && !extraChartOption) {
       hasData = false
       chart = <div style={nullTextStyle}>暂无数据</div>
     } else {
