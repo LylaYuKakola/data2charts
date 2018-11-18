@@ -18,6 +18,12 @@ const testData = {
 
 const columnNames = ['year', '型号', '渠道', '数值']
 
+const data2 = [
+  ['2012', '1'],
+  ['2013', '2'],
+  ['2014', '3'],
+]
+
 const data = [
   ['2012', '型号001', '渠道1', Math.random() * 10],
   ['2013', '型号001', '渠道1', Math.random() * 10],
@@ -170,7 +176,11 @@ ReactDOM.render(<div>
   <hr />
   <p>x轴为基准line默认配置</p>
   <Chart
-    chart={testChart1}
+    chart={{
+      chartType: 'line',
+      data: data2,
+      defaultDimName: '测试',
+    }}
   />
   <hr />
   <p>x轴为基准line增加DimColumns配置</p>
