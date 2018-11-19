@@ -126,7 +126,6 @@ class MapChart extends React.PureComponent {
     })
 
     this.dataMqp = dataMqp
-    return this
   }
 
   makeDataToChartOption() {
@@ -188,20 +187,25 @@ class MapChart extends React.PureComponent {
         echarts.registerMap(this.adcode, this.geoData)
 
         this.renderBreadcrumb(areaNode)
-          .buildDataMap()
-          .makeDataToChartOption()
+        this.buildDataMap()
+        this.makeDataToChartOption()
         this.chart.hideLoading()
         this.chart.clear()
-        console.log(this.chartOption)
         this.chart.setOption(deepCloneForChartOption(this.chartOption, this.props.extraChartOption), true)
       })
     })
   }
 
-  loadScript = src => {
+  loadScript = scriptName => {
     return new Promise(resolve => {
+      let src = ''
+      if (scriptName === 'amap') src = AMAPURL
+      else if (scriptName === 'amapui') src = AMAPUIURL
+      else resolve()
+
       let scriptDom = document.createElement('script')
       scriptDom.charset = 'utf-8'
+      scriptDom.id = scriptName
       scriptDom.src = src
       scriptDom.onload = () => {
         resolve()
@@ -290,7 +294,6 @@ class MapChart extends React.PureComponent {
     })
     const { canDrillDown } = this.props.data
     this.chartOption.graphic = canDrillDown ? graphicForMapChart : []
-    return this
   }
 
   renderChart() {
@@ -344,14 +347,16 @@ class MapChart extends React.PureComponent {
       this.chartOption = null
 
       // 引入AMap和AMapUI
-      if (!window.AMapUI || !window.AMap) {
-        this.loadScript(AMAPURL).then(() => {
-          return this.loadScript(AMAPUIURL)
-        }).then(() => {
-          this.loadChart()
+      if (!window.amap_script_promise__) {
+        window.amap_script_promise__ = this.loadScript('amap').then(() => {
+          return this.loadScript('amapui').then(() => {
+            this.loadChart()
+          })
         })
       } else {
-        this.loadChart()
+        window.amap_script_promise__.then(() => {
+          this.loadChart()
+        })
       }
     })
   }

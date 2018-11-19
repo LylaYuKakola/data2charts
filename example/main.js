@@ -218,6 +218,14 @@ ReactDOM.render(<div>
     chart={testChartForHeatMap}
   />
   <Chart
+    chartType="heatMap"
+    chart={testChartForHeatMap}
+  />
+  <Chart
+    chartType="heatMap"
+    chart={testChartForHeatMap}
+  />
+  <Chart
     chart={{
       chartType: 'bar',
     }}
