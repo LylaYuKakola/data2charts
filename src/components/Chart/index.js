@@ -48,7 +48,7 @@ class Chart extends React.PureComponent {
       (chart && chart.columnNames && (chart.columnNames instanceof Array)) ? chart.columnNames : []
 
     // 计算配置面板中所需要的标签
-    const npmOfDataColumn = (chart && chart.data && chart.data[0].length) ? chart.data[0].length : 0
+    const npmOfDataColumn = (chart && chart.data && chart.data[0]) ? chart.data[0].length : 0
     const allTags = Array(npmOfDataColumn).fill(0).map((val, index) => ({
       id: index,
       column: columnNames[index] || `第${(index + 1)}列`,
