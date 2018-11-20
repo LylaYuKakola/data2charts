@@ -24,6 +24,9 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   /*  6. defaultDimName（非必要）当只有一条折线或者一组柱状图时描述默认维度值  */
   /*  7. specialScaleArr（非必要）多轴时的第二条数据轴的值的集合             */
   /** ***************************************************************** */
+
+  if (!chart.data || !chart.data[0]) chart.data = [[]]
+
   const {
     data,
     location,

@@ -16,6 +16,12 @@ const testData = {
   }],
 }
 
+const extraChartOption = {
+  tooltip: {
+    trigger: 'item',
+  },
+}
+
 const columnNames = ['year', '型号', '渠道', '数值']
 
 const data2 = [
@@ -74,7 +80,7 @@ const dataForHeatMap = [
 ]
 
 const testChart1 = {
-  data,
+  // data,
   chartType: 'line',
 }
 
@@ -181,6 +187,7 @@ ReactDOM.render(<div>
       data: data2,
       defaultDimName: '测试',
     }}
+    extraChartOption={extraChartOption}
   />
   <hr />
   <p>x轴为基准line增加DimColumns配置</p>
