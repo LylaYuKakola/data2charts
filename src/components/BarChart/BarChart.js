@@ -163,7 +163,7 @@ class BarChart extends React.PureComponent {
           : params => {
             let sum = 0
             params.forEach(param => {
-              sum += Number(param.value)
+              sum += (Number(param.value) || 0)
             })
             return params.map(param => {
               const msgArr = []
@@ -171,10 +171,10 @@ class BarChart extends React.PureComponent {
               if (param.seriesName[1] !== '-') msgArr.push(param.seriesName)
               msgArr.push(param.value)
               if (params.length > 1) {
-                const percent = `${String((param.value * 100) / sum).substr(0, 5)}%`
+                const percent = `${String(((Number(param.value) || 0) * 100) / sum).substr(0, 5)}%`
                 msgArr.push(percent)
               }
-              const msg = msgArr.join(' - ')
+              const msg = msgArr.join(' | ')
               return `${param.marker} ${msg}`
             }).join('<br/>')
           },

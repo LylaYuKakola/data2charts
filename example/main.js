@@ -80,7 +80,7 @@ const dataForHeatMap = [
 ]
 
 const testChart1 = {
-  // data,
+  data,
   chartType: 'line',
 }
 
