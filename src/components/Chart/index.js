@@ -9,13 +9,6 @@ import OriginChartComponent from '../OriginChartComponent'
 import SettingPanel from './SettingPanel'
 
 /**
- * 2018/10/10 yurt
- * 当前主要问题为阻止了props的更新，所以暂时只能通过组件内部去更改图表和配置
- * 1. 是否需要从外部修改
- * 2. 从外部修改是否只提供一个api方法方便组件状态管理（影响组件扩展性）
- */
-
-/**
  * 带有配置面板的图表组件（扩展自originChartComponent）
  *
  * @param chart {Object} 图表对象 包含以下（参考 ./model/index ）

@@ -212,7 +212,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
     return { legendData, baseAxisData, sourceData, xOrY }
   }
 
-  if (['bar', 'stackedBar'].includes(chartType)) {
+  if (chartType === 'bar') {
     const legendData = dims
     let baseAxisData = baseLineArr
     // 为了应付所谓的前端排序 又得把之前的逻辑毁了
