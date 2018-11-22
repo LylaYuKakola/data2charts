@@ -5,7 +5,6 @@ import styles from './Chart.css'
 import PieChart from '../PieChart/PieChart'
 import BarChart from '../BarChart/BarChart'
 import LineChart from '../LineChart/LineChart'
-import SumChart from '../SumChart/SumChart'
 import MapChart from '../MapChart/MapChart'
 
 function isChartEmpty(data, type) {
@@ -25,7 +24,7 @@ function isChartEmpty(data, type) {
 }
 
 /**
- * 原始的chart的组件，主要实现react
+ * 原始的chart的组件
  */
 class ChartContainer extends React.Component {
   constructor(props) {
@@ -70,14 +69,10 @@ class ChartContainer extends React.Component {
           chart = <LineChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'bar':
-        case 'stackedBar':
           chart = <BarChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'pie':
           chart = <PieChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
-          break
-        case 'numeric':
-          chart = <SumChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
           break
         case 'heatMap':
           chart = <MapChart data={chartData} theme={theme} extraChartOption={extraChartOption} />
