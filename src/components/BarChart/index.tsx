@@ -1,28 +1,32 @@
-import React from 'react'
-import echarts from 'echarts/lib/echarts'
-import CSSModules from 'react-css-modules'
-import styles from './BarChart.css'
+import * as React from 'react'
+import * as echarts from 'echarts'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/grid'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/toolbox'
-import chartCss from '../../files/chartCss.json'
+import * as chartCss from '../../files/chartCss.json'
 import { deepCloneForChartOption } from '../../util'
 
-class BarChart extends React.PureComponent {
-  constructor(props) {
+import { CommonChartProps } from '../common-chart-type'
+
+class Index extends React.PureComponent<CommonChartProps, {}> {
+
+  chartInstance: any
+  chartContainer: any
+  state = {
+    data: this.props.data,
+    extraChartOption: this.props.extraChartOption,
+  }
+
+  constructor(props: CommonChartProps) {
     super(props)
-    this.state = {
-      data: props.data,
-      extraChartOption: props.extraChartOption,
-    }
   }
 
   componentDidMount() {
     this.renderChart()
   }
 
-  componentWillReceiveProps(changes) {
+  componentWillReceiveProps(changes: CommonChartProps) {
     this.setState({
       data: changes.data,
       extraChartOption: changes.extraChartOption,
@@ -33,19 +37,18 @@ class BarChart extends React.PureComponent {
     this.renderChart()
   }
 
-
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
-    this.myChart.dispose()
-    this.myChart = null
+    this.chartInstance.dispose()
+    this.chartInstance = null
   }
 
   handleResize = () => {
-    this.myChart.resize()
+    this.chartInstance.resize()
   }
 
   renderChart() {
-    const dom = this.chart
+    const dom:any = this.chartContainer
     const { theme } = this.props
     const { extraChartOption, data } = this.state
     if (theme) {
@@ -53,7 +56,7 @@ class BarChart extends React.PureComponent {
     } else {
       echarts.registerTheme('data2charts', chartCss)
     }
-    let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
+    let chartInstance = echarts.init(dom, 'data2charts') // eslint-disable-line
 
     const {
       title,
@@ -72,7 +75,7 @@ class BarChart extends React.PureComponent {
       axisLabel: {
         margin: 4,
         textStyle: {
-          color(value) {
+          color(value: string) {
             return value === '总量' ? '#ff6700' : '#9B9B9B'
           },
         },
@@ -81,7 +84,7 @@ class BarChart extends React.PureComponent {
     const valueAxis = {
       type: 'value',
       axisLabel: {
-        formatter: value => {
+        formatter: (value:number) => {
           let vl = ''
           if (value >= 1000000000) {
             vl = `${value / 1000000000}B`
@@ -107,7 +110,7 @@ class BarChart extends React.PureComponent {
       xAxis = valueAxis
     }
 
-    const option = {
+    const option:any = {
       title: {
         text: title,
         subtext: subTitle || '',
@@ -159,8 +162,8 @@ class BarChart extends React.PureComponent {
           type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
         },
         formatter: tooltip && tooltip.formatter === 'multi'
-          ? thisData => sourceData[thisData[0].dataIndex][3]
-          : params => {
+          ? (thisData:any[]) => sourceData[thisData[0].dataIndex][3]
+          : (params:any[]) => {
             let sum = 0
             params.forEach(param => {
               sum += (Number(param.value) || 0)
@@ -182,7 +185,7 @@ class BarChart extends React.PureComponent {
       grid,
       xAxis,
       yAxis,
-      series: [],
+      series: Array(),
     }
     if (legendData && legendData.length > 0) {
       option.legend = {
@@ -207,7 +210,7 @@ class BarChart extends React.PureComponent {
           data: sourceData.map(item => item[0]),
           itemStyle: {
             normal: {
-              color(param) {
+              color(param:any) {
                 return param.data < 0 ? '#2288DD' : '#ff6700'
               },
             },
@@ -216,7 +219,7 @@ class BarChart extends React.PureComponent {
             normal: {
               show: true,
               position: 'right',
-              formatter: thisData => sourceData[thisData.dataIndex][2],
+              formatter: (thisData:any) => sourceData[thisData.dataIndex][2],
             },
           },
         }]
@@ -224,7 +227,7 @@ class BarChart extends React.PureComponent {
           type: 'bar',
           itemStyle: {
             normal: {
-              color(param) {
+              color(param:any) {
                 return param.data < 0 ? '#2288DD' : '#ff6700'
               },
             },
@@ -233,17 +236,17 @@ class BarChart extends React.PureComponent {
           data: sourceData,
         }]
     }
-    myChart.setOption(deepCloneForChartOption(option, extraChartOption), true)
-    this.myChart = myChart
+    chartInstance.setOption(deepCloneForChartOption(option, extraChartOption), true)
+    this.chartInstance = chartInstance
     window.addEventListener('resize', this.handleResize)
   }
 
   render() {
-    return <div styleName="container" ref={el => { this.chart = el }} />
+    return <div className="container" ref={(el:any) => { this.chartContainer = el }}/>
   }
 }
 
-export default CSSModules(BarChart, styles)
+export default Index
 
 /**
  * 2018/10/9 Changed By yurt

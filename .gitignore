@@ -1,6 +1,10 @@
 node_modules
 package-lock.json
-.idea
-lib
 yarn.lock
+lib
+dist
+
+.idea
 .DS_Store
+.cache
+.vscode

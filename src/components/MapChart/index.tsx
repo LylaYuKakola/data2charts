@@ -1,56 +1,77 @@
-import React from 'react'
-import echarts from 'echarts/lib/echarts'
+import * as React from 'react'
+import * as echarts from 'echarts'
 import 'echarts/lib/chart/map'
 import 'echarts/lib/component/geo'
 import 'echarts/lib/component/visualMap'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/graphic'
-import CSSModules from 'react-css-modules'
-import styles from './MapChart.css'
-import chartCss from '../../files/chartCss.json'
+import * as chartCss from '../../files/chartCss.json'
 import { deepCloneForChartOption } from '../../util'
 
+import { CommonChartProps } from '../common-chart-type'
 
-/**
- * 2018/10/17 重写renderChart
- * 把geoJSON用高德的api获取
- */
+const keyValue:string = '7f9bb5546562740fa4f1ca832126218e'
 
-// {adcode}  // option缺少 lengend series visualMap.max
+class MapChart extends React.PureComponent<CommonChartProps, {}> {
 
+  static KEY = `key=${keyValue}`
+  static AMAPURL = `http://webapi.amap.com/maps?v=1.4.6&key=${keyValue}`
+  static AMAPUIURL = 'http://webapi.amap.com/ui/1.0/main.js?v=1.0.11'
+  static CONSTQUERY = 's=rsv3&output=json&subdistrict=0&extensions=base'
+  static AMAPAPIURL = 'https://restapi.amap.com/v3/config/district'
 
-const KEY = 'key=7f9bb5546562740fa4f1ca832126218e'
-const AMAPURL = `http://webapi.amap.com/maps?v=1.4.6&key=${KEY}`
-const AMAPUIURL = 'http://webapi.amap.com/ui/1.0/main.js?v=1.0.11'
-const CONSTQUERY = 's=rsv3&output=json&subdistrict=0&extensions=base'
-const AMAPAPIURL = 'https://restapi.amap.com/v3/config/district'
+  chartInstance: any
+  chartContainer: any
+  chartOption: any
+  districtExplorer: any
+  dataMap: any
+  adcode: number|string
+  geoData: any
+  breadcrumbData: any[]
+  currentLevel: number
+  state = {
+    data: this.props.data,
+    extraChartOption: this.props.extraChartOption,
+  }
 
-class MapChart extends React.PureComponent {
+  constructor(props: CommonChartProps) {
+    super(props)
+  }
+
   componentDidMount() {
     this.renderChart()
     window.addEventListener('resize', () => this.handleResize())
   }
 
+  componentWillReceiveProps(changes:CommonChartProps) {
+    if (JSON.stringify(this.state.data) !== JSON.stringify(changes.data)) {
+      this.setState({
+        data: changes.data,
+      })
+      this.renderChart()
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', () => this.handleResize())
-    this.chart.dispose()
-    this.chart = null
+    this.chartInstance.dispose()
+    this.chartInstance = null
   }
 
   handleResize() {
-    if (this.chart) this.chart.resize()
+    if (this.chartInstance) this.chartInstance.resize()
   }
 
   fetchPolyline = (area = '中国') => {
     if (area === '全国') area = '中国'
-    const requestURL = `${AMAPAPIURL}?${KEY}&${CONSTQUERY}&keywords=${encodeURIComponent(area)}`
+    const requestURL = `${MapChart.AMAPAPIURL}?${MapChart.KEY}&${MapChart.CONSTQUERY}&keywords=${encodeURIComponent(area)}`
     return fetch(requestURL).then(res => res.json())
   }
 
   initChartOption() {
     if (this.chartOption) return this
-    const { title, legendData } = this.props.data
+    const { title, legendData } = this.state.data
     this.chartOption = {
       title: {
         text: title,
@@ -94,7 +115,7 @@ class MapChart extends React.PureComponent {
   initDistrictExplorer() {
     return new Promise((resolve, reject) => {
       if (this.districtExplorer) return resolve()
-      window.AMapUI.loadUI(['geo/DistrictExplorer'], DistrictExplorer => {
+      Reflect.get(window, 'AMapUI').loadUI(['geo/DistrictExplorer'], (DistrictExplorer:any) => {
         if (DistrictExplorer) {
           this.districtExplorer = new DistrictExplorer()
           resolve()
@@ -105,11 +126,11 @@ class MapChart extends React.PureComponent {
   }
 
   buildDataMap() {
-    const { originDataTree } = this.props.data
+    const { originDataTree } = this.state.data
     const { breadcrumbData } = this
     const currentDepth = breadcrumbData.length
     let currentObject = originDataTree
-    const dataMqp = Object.create(null)
+    const dataMap = Object.create(null)
 
     for (let i = 1; i < currentDepth; i++) {
       if (breadcrumbData[i]) {
@@ -122,20 +143,20 @@ class MapChart extends React.PureComponent {
       const reg = /\*\*\|(\S+?)\|\*\*/g
       let sum = 0
       objectStr.match(reg).forEach(val => sum += (Number(val.slice(3, val.length - 3)) || 0))
-      dataMqp[childKey.substr(0, 2)] = sum
+      dataMap[childKey.substr(0, 2)] = sum
     })
 
-    this.dataMqp = dataMqp
+    this.dataMap = dataMap
   }
 
   makeDataToChartOption() {
-    const { legendData } = this.props.data
-    const { dataMqp, adcode } = this
+    const { legendData } = this.state.data
+    const { dataMap, adcode } = this
     const { features } = this.geoData
     let max = 0
-    const data = features.map(feature => {
+    const data = features.map((feature:any) => {
       const { properties } = feature
-      const value = dataMqp[properties.name.substr(0, 2)] || '0'
+      const value = dataMap[properties.name.substr(0, 2)] || '0'
       if (max < value) max = value
       return {
         name: properties.name,
@@ -180,27 +201,27 @@ class MapChart extends React.PureComponent {
   }
 
   loadChart() {
-    this.chart.showLoading()
+    this.chartInstance.showLoading()
     this.initChartOption().initDistrictExplorer().then(() => {
-      this.districtExplorer.loadAreaNode(this.adcode, (error, areaNode) => {
+      this.districtExplorer.loadAreaNode(this.adcode, (error:any, areaNode:any) => {
         this.geoData.features = areaNode.getSubFeatures()
-        echarts.registerMap(this.adcode, this.geoData)
+        echarts.registerMap(String(this.adcode), this.geoData)
 
         this.renderBreadcrumb(areaNode)
         this.buildDataMap()
         this.makeDataToChartOption()
-        this.chart.hideLoading()
-        this.chart.clear()
-        this.chart.setOption(deepCloneForChartOption(this.chartOption, this.props.extraChartOption), true)
+        this.chartInstance.hideLoading()
+        this.chartInstance.clear()
+        this.chartInstance.setOption(deepCloneForChartOption(this.chartOption, this.state.extraChartOption), true)
       })
     })
   }
 
-  loadScript = scriptName => {
+  loadScript = (scriptName:string) => {
     return new Promise(resolve => {
       let src = ''
-      if (scriptName === 'amap') src = AMAPURL
-      else if (scriptName === 'amapui') src = AMAPUIURL
+      if (scriptName === 'amap') src = MapChart.AMAPURL
+      else if (scriptName === 'amapui') src = MapChart.AMAPUIURL
       else resolve()
 
       let scriptDom = document.createElement('script')
@@ -215,7 +236,7 @@ class MapChart extends React.PureComponent {
     })
   }
 
-  renderBreadcrumb(areaNode) {
+  renderBreadcrumb(areaNode:any) {
     const areaProps = areaNode.getProps()
 
     // 重新构造面包屑组件的数据
@@ -232,7 +253,7 @@ class MapChart extends React.PureComponent {
     }
     this.breadcrumbData = newBreadcrumbData
 
-    const graphicForMapChart = []
+    const graphicForMapChart:any[] = []
     const graphicPosition = {
       leftCur: 20,
       top: 60,
@@ -292,12 +313,12 @@ class MapChart extends React.PureComponent {
       })
       concatString += (crumb.name || '-无名称地址-')
     })
-    const { canDrillDown } = this.props.data
+    const { canDrillDown } = this.state.data
     this.chartOption.graphic = canDrillDown ? graphicForMapChart : []
   }
 
   renderChart() {
-    const { area, canDrillDown } = this.props.data
+    const { area, canDrillDown } = this.state.data
 
     this.fetchPolyline(area).then(res => {
       let adcode = 100000
@@ -310,18 +331,17 @@ class MapChart extends React.PureComponent {
     }).then(res => {
       const adcode = res.adcode || 100000
       const name = res.name || '全国'
-      const container = this.container
       const { theme } = this.props
       if (theme) {
         echarts.registerTheme('data2charts', theme)
       } else {
         echarts.registerTheme('data2charts', chartCss)
       }
-      this.chart = echarts.init(container, 'data2charts')
+      this.chartInstance = echarts.init(this.chartContainer, 'data2charts')
 
       // 点击下钻
       if (canDrillDown) {
-        this.chart.on('click', event => {
+        this.chartInstance.on('click', (event:any) => {
           const { componentType } = event
           let childrenNum = 0
 
@@ -347,14 +367,14 @@ class MapChart extends React.PureComponent {
       this.chartOption = null
 
       // 引入AMap和AMapUI
-      if (!window.amap_script_promise__) {
-        window.amap_script_promise__ = this.loadScript('amap').then(() => {
+      if (!Reflect.has(window, 'amap_script_promise__')) {
+        Reflect.set(window, 'amap_script_promise__', this.loadScript('amap').then(() => {
           return this.loadScript('amapui').then(() => {
             this.loadChart()
           })
-        })
+        }))
       } else {
-        window.amap_script_promise__.then(() => {
+        Reflect.get(window, 'amap_script_promise__').then(() => {
           this.loadChart()
         })
       }
@@ -363,12 +383,12 @@ class MapChart extends React.PureComponent {
 
   render() {
     return (<div
-      styleName="container"
+      className="container"
       ref={el => {
-        this.container = el
+        this.chartContainer = el
       }}
     />)
   }
 }
 
-export default CSSModules(MapChart, styles)
+export default MapChart

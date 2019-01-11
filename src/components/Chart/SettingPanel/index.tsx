@@ -1,9 +1,10 @@
-import React from 'react'
-import CSSModules from 'react-css-modules'
-import styles from './SettingPanel.css'
+import * as React from 'react'
+import './index.scss'
+// @ts-ignore
 import { DraggableAreasGroup } from 'react-draggable-tags'
 import { Icon, Select } from 'antd'
 import 'antd/lib/select/style/css'
+import {any} from 'prop-types'
 
 const group = new DraggableAreasGroup()
 const DraggableArea1 = group.addArea()
@@ -22,24 +23,37 @@ const tagStyle = {
   background: 'rgba(255, 255, 255, 0.7)',
 }
 
-class SettingPanel extends React.PureComponent {
-  constructor(props) {
+interface SettingPanelProps {
+  chartType: string, // 图表类型
+  xOrY: string,
+  allTags: any[],
+  xColumn: number,
+  yColumn: number,
+  dimColumns: number[],
+  onClose: (result:any)=>void,
+}
+
+class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
+  constructor(props:SettingPanelProps) {
     super(props)
-
-    this.state = {
-      visible: false,
-      chartType: props.chartType,
-      xOrY: props.xOrY,
-      xTags: [],
-      yTags: [],
-      dimColumnsTags: [],
-      otherTags: [],
-    }
-
     this.constructTagsForDragArea()
   }
 
-  onXColumnChange = tags => {
+  result: any
+  addTagToOtherTagCell: (tag:any)=>{}
+  settingMask: any
+
+  state = {
+    visible: false,
+    chartType: this.props.chartType,
+    xOrY: this.props.xOrY,
+    xTags: Array(),
+    yTags: Array(),
+    dimColumnsTags: Array(),
+    otherTags: Array(),
+  }
+
+  onXColumnChange = (tags:any[]) => {
     let xTags
     if (tags.length > 1) {
       // 当存在两个tag时，选取新拖入的tag
@@ -57,7 +71,7 @@ class SettingPanel extends React.PureComponent {
     })
   }
 
-  onYColumnChange = tags => {
+  onYColumnChange = (tags:any[]) => {
     let yTags
     if (tags.length > 1) {
       // 当存在两个tag时，选取新拖入的tag
@@ -75,12 +89,12 @@ class SettingPanel extends React.PureComponent {
     })
   }
 
-  onDimColumnsChange = tags => {
+  onDimColumnsChange = (tags:any[]) => {
     this.result.dimColumns = tags.map(tag => tag.id)
     this.setState({ dimColumnsTags: tags })
   }
 
-  onChangeChartType = val => {
+  onChangeChartType = (val:string) => {
     const chartType = val
     let dimColumnsTags = this.state.dimColumnsTags
     this.result.chartType = chartType
@@ -101,17 +115,19 @@ class SettingPanel extends React.PureComponent {
     })
   }
 
-  onChangeXOrY = val => {
+  onChangeXOrY = (val:string) => {
     this.result.xOrY = val
     this.setState({
       xOrY: val,
     })
   }
 
-  constructTagsForDragArea(newProps) {
-    const { allTags, chartType } = newProps || this.props
+  constructTagsForDragArea(newProps = this.props) {
+    const { allTags, chartType } = newProps
     let { xOrY, xColumn, yColumn, dimColumns } = newProps || this.props
-    const [xTags, yTags, dimColumnsTags, otherTags] = [[], [], [], []]
+    const [xTags, yTags, dimColumnsTags, otherTags] = [
+      Array(), Array(), Array(), Array()
+    ]
 
     xOrY = xOrY || 'x'
     if (!allTags.length) {
@@ -155,7 +171,7 @@ class SettingPanel extends React.PureComponent {
     this.result = { chartType, xOrY, xColumn, yColumn, dimColumns }
   }
 
-  openSettingPanel = newProps => {
+  openSettingPanel = (newProps:SettingPanelProps) => {
     this.constructTagsForDragArea(newProps)
     this.setState({ visible: true })
   }
@@ -182,16 +198,16 @@ class SettingPanel extends React.PureComponent {
     return visible &&
       <div>
         <div
-          styleName="setting-mask"
+          className="setting-mask"
           onClick={this.closeSettingPanel}
           ref={settingMask => this.settingMask = settingMask}
         />
-        <div styleName="setting-panel">
-          <div styleName="setting-panel-close-btn" onClick={this.closeSettingPanel}>
+        <div className="setting-panel">
+          <div className="setting-panel-close-btn" onClick={this.closeSettingPanel}>
             <Icon type="down" theme="outlined" />
           </div>
-          <div styleName="setting-panel-left">
-            <div styleName="setting-panel-left-cell">
+          <div className="setting-panel-left">
+            <div className="setting-panel-left-cell">
               <span>chartType : </span>
               <Select
                 defaultValue={chartType}
@@ -204,7 +220,7 @@ class SettingPanel extends React.PureComponent {
               </Select>
             </div>
             {['line', 'bar', 'stackedBar'].includes(chartType) && (
-              <div styleName="setting-panel-left-cell">
+              <div className="setting-panel-left-cell">
                 <span>xOrY : </span>
                 <Select
                   defaultValue={xOrY || 'x'}
@@ -217,14 +233,14 @@ class SettingPanel extends React.PureComponent {
               </div>
             )}
           </div>
-          <div styleName="setting-panel-right">
-            <div styleName="setting-panel-right-left">
+          <div className="setting-panel-right">
+            <div className="setting-panel-right-left">
               所有列
-              <div styleName="setting-panel-right-box-large">
+              <div className="setting-panel-right-box-large">
                 <DraggableArea1
                   initialTags={otherTags}
-                  getAddTagFunc={fn => this.addTagToOtherTagCell = fn}
-                  render={({ tag }) => (
+                  getAddTagFunc={(fn:any) => this.addTagToOtherTagCell = fn}
+                  render={({ tag }:any) => (
                     <div style={tagStyle}>
                       {tag.column}
                     </div>
@@ -232,12 +248,12 @@ class SettingPanel extends React.PureComponent {
                 />
               </div>
             </div>
-            <div styleName="setting-panel-right-right">
+            <div className="setting-panel-right-right">
               { chartType === 'pie' ? '指标列(单选)' : 'X轴列(单选)' }
-              <div styleName="setting-panel-right-box-small">
+              <div className="setting-panel-right-box-small">
                 <DraggableArea2
                   tags={xTags}
-                  render={({ tag }) => (
+                  render={({ tag }:any) => (
                     <div style={tagStyle}>
                       {tag.column}
                     </div>
@@ -246,10 +262,10 @@ class SettingPanel extends React.PureComponent {
                 />
               </div>
               { chartType === 'pie' ? '数值列(单选)' : 'Y轴列(单选)' }
-              <div styleName="setting-panel-right-box-small">
+              <div className="setting-panel-right-box-small">
                 <DraggableArea3
                   tags={yTags}
-                  render={({ tag }) => (
+                  render={({ tag }:any) => (
                     <div style={tagStyle}>
                       {tag.column}
                     </div>
@@ -259,10 +275,10 @@ class SettingPanel extends React.PureComponent {
               </div>
               {['line', 'bar', 'stackedBar'].includes(chartType) && '合并列' }
               {['line', 'bar', 'stackedBar'].includes(chartType) &&
-                <div styleName="setting-panel-right-box-median">
+                <div className="setting-panel-right-box-median">
                   <DraggableArea4
                     tags={dimColumnsTags}
-                    render={({ tag }) => (
+                    render={({ tag }:any) => (
                       <div style={tagStyle}>
                         {tag.column}
                       </div>
@@ -278,5 +294,5 @@ class SettingPanel extends React.PureComponent {
   }
 }
 
-export default CSSModules(SettingPanel, styles)
+export default SettingPanel
 

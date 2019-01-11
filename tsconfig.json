@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "outDir": "./dist",
+    "sourceMap": false,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node",
+      "lodash",
+      "express"
+    ],
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "exclude": [
+      "node_modules/**/*.ts",
+      "node_modules/**/*.d.ts",
+      "node_modules/**/*.tsx"
+    ]
+  },
+  "extends": ["tslint-config-airbnb"],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "arrow-parens": false,
+    "ter-arrow-parens": false,
+    "semicolon": [
+      true,
+      "never"
+    ]
+  }
+}

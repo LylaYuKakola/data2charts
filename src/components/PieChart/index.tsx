@@ -1,30 +1,33 @@
-import React from 'react'
-import CSSModules from 'react-css-modules'
-import styles from './PieChart.css'
-import echarts from 'echarts/lib/echarts'
+import * as React from 'react'
+import * as echarts from 'echarts'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/grid'
 import 'echarts/lib/component/legendScroll'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
-import chartCss from '../../files/chartCss.json'
+import * as chartCss from '../../files/chartCss.json'
 import { deepCloneForChartOption } from '../../util'
 
+import { CommonChartProps } from '../common-chart-type'
 
-class PieChart extends React.PureComponent {
-  constructor(props) {
+class PieChart extends React.PureComponent<CommonChartProps, {}>  {
+
+  chartInstance: any
+  chartContainer: any
+  state = {
+    data: this.props.data,
+    extraChartOption: this.props.extraChartOption,
+  }
+
+  constructor(props: CommonChartProps) {
     super(props)
-    this.state = {
-      data: props.data,
-      extraChartOption: props.extraChartOption,
-    }
   }
 
   componentDidMount() {
     this.renderChart()
   }
 
-  componentWillReceiveProps(changes) {
+  componentWillReceiveProps(changes:CommonChartProps) {
     this.setState({
       data: changes.data,
       extraChartOption: changes.extraChartOption,
@@ -37,16 +40,16 @@ class PieChart extends React.PureComponent {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
-    this.myChart.dispose()
-    this.myChart = null
+    this.chartInstance.dispose()
+    this.chartInstance = null
   }
 
   handleResize = () => {
-    this.myChart.resize()
+    this.chartInstance.resize()
   }
 
   renderChart() {
-    const dom = this.chart
+    const dom = this.chartContainer
     const { data, extraChartOption } = this.state
     const { theme } = this.props
     if (theme) {
@@ -103,13 +106,13 @@ class PieChart extends React.PureComponent {
       })),
     }
     myChart.setOption(deepCloneForChartOption(option, extraChartOption), true)
-    this.myChart = myChart
+    this.chartInstance = myChart
     window.addEventListener('resize', this.handleResize)
   }
 
   render() {
-    return <div styleName="container" ref={el => { this.chart = el }} />
+    return <div className="container" ref={el => { this.chartContainer = el }} />
   }
 }
 
-export default CSSModules(PieChart, styles)
+export default PieChart

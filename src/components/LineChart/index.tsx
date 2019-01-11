@@ -1,30 +1,33 @@
-import React from 'react'
-import echarts from 'echarts/lib/echarts'
-import CSSModules from 'react-css-modules'
-import styles from './LineChart.css'
+import * as React from 'react'
+import * as echarts from 'echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/grid'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/toolbox'
-import chartCss from '../../files/chartCss.json'
-import { lengendNotSelected } from './option'
+import * as chartCss from '../../files/chartCss.json'
 import { deepCloneForChartOption } from '../../util'
 
-class LineChart extends React.PureComponent {
-  constructor(props) {
+import { CommonChartProps } from '../common-chart-type'
+
+class Index extends React.PureComponent<CommonChartProps, {}> {
+
+  chartInstance: any
+  chartContainer: any
+  state = {
+    data: this.props.data,
+    extraChartOption: this.props.extraChartOption,
+  }
+
+  constructor(props: CommonChartProps) {
     super(props)
-    this.state = {
-      data: props.data,
-      extraChartOption: props.extraChartOption,
-    }
   }
 
   componentDidMount() {
     this.renderChart()
   }
 
-  componentWillReceiveProps(changes) {
+  componentWillReceiveProps(changes:CommonChartProps) {
     this.setState({
       data: changes.data,
       extraChartOption: changes.extraChartOption,
@@ -37,14 +40,14 @@ class LineChart extends React.PureComponent {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
-    this.myChart.dispose()
-    this.myChart = null
+    this.chartInstance.dispose()
+    this.chartInstance = null
   }
   handleResize = () => {
-    this.myChart.resize()
+    this.chartInstance.resize()
   }
   renderChart() {
-    const dom = this.chart
+    const dom = this.chartContainer
     const { extraChartOption, data } = this.state
     const { theme } = this.props
     if (theme) {
@@ -52,11 +55,8 @@ class LineChart extends React.PureComponent {
     } else {
       echarts.registerTheme('data2charts', chartCss)
     }
-    let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
+    let chartInstance = echarts.init(dom, 'data2charts') // eslint-disable-line
     const notSelected = {}
-    lengendNotSelected.forEach(item => {
-      notSelected[item] = false
-    })
 
     const {
       title,
@@ -68,11 +68,11 @@ class LineChart extends React.PureComponent {
     } = data
 
     // 根据data构造坐标轴配置
-    const baseAxis = {
+    const baseAxis:any = {
       type: 'category',
       data: baseAxisData,
     }
-    let valueAxis = {
+    let valueAxis:any = {
       type: 'value',
       nameTextStyle: {
         width: 20,
@@ -83,7 +83,7 @@ class LineChart extends React.PureComponent {
       axisLabel: {
         margin: 1,
         fontSize: 10,
-        formatter: value => {
+        formatter: (value:number) => {
           let vl = ''
           if (value >= 1000000000) {
             vl = `${value / 1000000000}B`
@@ -163,17 +163,17 @@ class LineChart extends React.PureComponent {
         }
       )),
     }
-    myChart.setOption(deepCloneForChartOption(option, extraChartOption), true)
-    this.myChart = myChart
+    chartInstance.setOption(deepCloneForChartOption(option, extraChartOption), true)
+    this.chartInstance = chartInstance
     window.addEventListener('resize', this.handleResize)
   }
 
   render() {
-    return <div styleName="container" ref={el => { this.chart = el }} />
+    return <div className="container" ref={el => { this.chartContainer = el }} />
   }
 }
 
-export default CSSModules(LineChart, styles)
+export default Index
 
 /**
  * 2018/10/9 Changed By yurt

@@ -5,17 +5,22 @@
  * 3. 中间几列为分组，进行条件选择
  */
 
-/**
- * 计算图表数据
- * @param chart 图表配置对象
- * @param chartType 图表类型
- * @param xOrY x/y轴为基轴，针对直角坐标系图表
- * @param xColumn x轴对应的列
- * @param yColumn y轴对应的列
- * @param dimColumns 分组对应的列
- * @return {*}
- */
-export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumns) {
+interface ChartOptionProps {
+  data: any[][],
+  location: string,
+  specialAxis: any[],
+  description: string,
+  defaultDimName: string,
+  specialScaleArr: any[],
+  chartType: string,
+  xOrY: string,
+  xColumn: number,
+  yColumn: number,
+  dimColumns: number[],
+  canDrillDown: boolean,
+}
+
+export function getChartData(chartOption:ChartOptionProps) {
   /** ******************* chart对象需要满足以下几个属性 ****************** */
   /*  1. data（必要）二维数组 table数据格式 包含chart所需要的数据            */
   /*  3. location（非必要）地图类型时指示显示的省份地址                      */
@@ -25,28 +30,25 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   /*  7. specialScaleArr（非必要）多轴时的第二条数据轴的值的集合             */
   /** ***************************************************************** */
 
-  if (!chart.data || !chart.data[0]) chart.data = [[]]
-
-  const {
+  let {
     data,
     location,
     specialAxis,
     description,
     defaultDimName,
     specialScaleArr,
-  } = { description: '', defaultDimName: '', ...chart }
-
-  xOrY = xOrY || 'x'
-
-  // numeric 只显示值
-  if (chartType === 'numeric') {
-    let value
-    if (!data || !data[0] || (!data[0][0] && Number(data[0][0]) !== 0)) {
-      value = '--'
-    } else {
-      value = String(data[0][0]).includes('%') > -1 ? data[0][0] : Number(data[0][0])
-    }
-    return { value, description }
+    chartType,
+    xOrY,
+    xColumn,
+    yColumn,
+    dimColumns,
+    canDrillDown,
+  } = {
+    description: '',
+    defaultDimName: '',
+    data: [[]],
+    xOrY: 'x',
+    ...chartOption
   }
 
   // 热力图特殊处理
@@ -58,9 +60,9 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
 
     data.forEach(row => {
       let currentObject = originDataTree
-      const rowLenth = row.length
+      const rowLength = row.length
       row.forEach((val, index) => {
-        if (rowLenth === (index + 1)) {
+        if (rowLength === (index + 1)) {
           currentObject.value = `**|${val}|**`
           return
         }
@@ -69,7 +71,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
       })
     })
 
-    return { area, legendData, originDataTree, canDrillDown: chart.canDrillDown }
+    return { area, legendData, originDataTree, canDrillDown}
   }
 
   // 判断data为空，则直接显示空数据
@@ -109,12 +111,13 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   }
 
   let dimValues = Array(dimColumns.length)
-  let baseLineArr = new Set()
+  let baseLineArr: any
+  baseLineArr = new Set()
 
   const dataMap = new Map()
   data.forEach((row, index) => {
-    let xColumnValue = ''
-    let yColumnValue = ''
+    let xColumnValue
+    let yColumnValue
     if (xColumn === -1) {
       xColumnValue = index
       yColumnValue = row[0]
@@ -148,14 +151,14 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   })
 
   baseLineArr = specialAxis || [...baseLineArr]
-  const dims = []
-  const sourceData = []
+  const dims = Array()
+  const sourceData = Array()
   if (!dimValues.length) {
     // 单个维度
     dims.push(defaultDimName)
     sourceData.push({
       name: defaultDimName,
-      data: baseLineArr.map(name => {
+      data: baseLineArr.map((name:string) => {
         let value = dataMap.get(name)
         value = (!value && value !== 0) ? '-' : value
         if (chartType === 'pie') {
@@ -167,12 +170,12 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
   } else {
     // 组合维度
     dimValues = dimValues.map(val => [...val])
-    const combineArr = (baseTowDimsArr, currentStr = '', currentIndex = 0) => {
+    const combineArr = (baseTowDimsArr:any, currentStr = '', currentIndex = 0) => {
       const currentOneDimArr = baseTowDimsArr[currentIndex]
       if (!currentOneDimArr || !currentOneDimArr.length) {
         dims.push(currentStr)
       } else {
-        currentOneDimArr.forEach(val => {
+        currentOneDimArr.forEach((val:number|string) => {
           combineArr(baseTowDimsArr, currentStr + String(val), currentIndex + 1)
         })
       }
@@ -181,7 +184,7 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
     dims.forEach(dim => {
       sourceData.push({
         name: dim,
-        data: baseLineArr.map(bLineData => {
+        data: baseLineArr.map((bLineData:string) => {
           let value = dataMap.get(bLineData + dim)
           value = (!value && value !== 0) ? '-' : value
           return value
@@ -218,8 +221,8 @@ export function getChartData(chart, chartType, xOrY, xColumn, yColumn, dimColumn
     // 为了应付所谓的前端排序 又得把之前的逻辑毁了
     if (sourceData.length === 1 && legendData.length === 1) {
       baseAxisData = []
-      const mapForSort = []
-      sourceData[0].data.forEach((val, index) => {
+      const mapForSort = Array()
+      sourceData[0].data.forEach((val:string, index:number) => {
         mapForSort.push([baseLineArr[index], val])
       })
       sourceData[0].data = []
