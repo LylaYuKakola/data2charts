@@ -111,6 +111,9 @@ class Index extends React.PureComponent<CommonChartProps, {}> {
     }
 
     const option:any = {
+      grid,
+      xAxis,
+      yAxis,
       title: {
         text: title,
         subtext: subTitle || '',
@@ -182,9 +185,6 @@ class Index extends React.PureComponent<CommonChartProps, {}> {
             }).join('<br/>')
           },
       },
-      grid,
-      xAxis,
-      yAxis,
       series: Array(),
     }
     if (legendData && legendData.length > 0) {

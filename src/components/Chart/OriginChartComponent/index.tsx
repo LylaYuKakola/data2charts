@@ -20,7 +20,9 @@ export default class OriginChartComponent extends React.Component<OriginChartCom
   static isChartEmpty(data:any, type:string) {
     if (type === 'numeric' && data.value === '0') {
       return true
-    } else if (type === 'bar' || type === 'pie') {
+    }
+
+    if (type === 'bar' || type === 'pie') {
       if (data.sourceData && data.sourceData.length === 0) {
         return true
       }
@@ -107,4 +109,3 @@ export default class OriginChartComponent extends React.Component<OriginChartCom
     )
   }
 }
-

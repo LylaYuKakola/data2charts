@@ -120,6 +120,8 @@ class Index extends React.PureComponent<CommonChartProps, {}> {
     }
 
     const option = {
+      xAxis,
+      yAxis,
       title: {
         text: title,
         padding: [4, 0],
@@ -154,14 +156,10 @@ class Index extends React.PureComponent<CommonChartProps, {}> {
         },
         top: 'bottom',
       },
-      xAxis,
-      yAxis,
-      series: sourceData.map(item => (
-        {
-          ...item,
-          type: 'line',
-        }
-      )),
+      series: sourceData.map(item => ({
+        ...item,
+        type: 'line',
+      })),
     }
     chartInstance.setOption(deepCloneForChartOption(option, extraChartOption), true)
     this.chartInstance = chartInstance

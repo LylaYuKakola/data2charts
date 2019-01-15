@@ -57,7 +57,7 @@ class PieChart extends React.PureComponent<CommonChartProps, {}>  {
     } else {
       echarts.registerTheme('data2charts', chartCss)
     }
-    let myChart = echarts.init(dom,'data2charts') // eslint-disable-line
+    let myChart = echarts.init(dom, 'data2charts') // eslint-disable-line
     const option = {
       title: {
         text: data.title || '',

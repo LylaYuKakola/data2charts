@@ -46,7 +46,7 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
   state: any
   settingPanel: any
 
-  constructor(props:ChartProps) {
+  constructor(props: ChartProps) {
     super(props)
     let {
       chartType,
@@ -62,7 +62,7 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
       title,
     } = {
       xOrY: 'x',
-      ...props
+      ...props,
     }
 
     // 计算配置面板中所需要的标签
@@ -75,14 +75,14 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
     // 初始化 xColumn、yColumn、dimColumns
     if (xOrY = 'x') {
       xColumn = xColumn || 0
-      yColumn = yColumn || npmOfDataColumn-1
+      yColumn = yColumn || npmOfDataColumn - 1
     } else {
       yColumn = yColumn || 0
-      xColumn = xColumn || npmOfDataColumn-1
+      xColumn = xColumn || npmOfDataColumn - 1
     }
 
     if (npmOfDataColumn > 2) {
-      dimColumns = dimColumns || Array(npmOfDataColumn-2).fill(0).map((val, index) => index+1)
+      dimColumns = dimColumns || Array(npmOfDataColumn - 2).fill(0).map((val, index) => index + 1)
     }
 
     const isFullScreen = false
@@ -102,10 +102,20 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
     }
   }
 
-  componentWillReceiveProps(changes:ChartProps) {
+  componentWillReceiveProps(changes: ChartProps) {
     this.setState(objectFilter(
-      ['chartType', 'data', 'xColumn', 'yColumn', 'dimColumns', 'xOrY', 'extraChartOption', 'componentStyle', 'title'],
-      changes
+      [
+        'chartType',
+        'data',
+        'xColumn',
+        'yColumn',
+        'dimColumns',
+        'xOrY',
+        'extraChartOption',
+        'componentStyle',
+        'title',
+      ],
+      changes,
     ))
   }
 
@@ -123,11 +133,11 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
 
   updateChartData = (data: any[][]) => {
     this.setState({
-      data: data,
+      data,
     })
   }
 
-  closeSettingPanelHandler = (option:any) => {
+  closeSettingPanelHandler = (option: any) => {
     this.setState(option)
   }
 
@@ -143,7 +153,7 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
     })
   }
 
-  renderChartPanel(chartData:any, isFullScreen:boolean) {
+  renderChartPanel(chartData: any, isFullScreen: boolean) {
     const {
       chartType, xOrY, xColumn, yColumn, componentStyle,
       dimColumns, allTags, theme, extraChartOption, title,
@@ -151,7 +161,8 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
     const needSettingPanel = !(['numeric', 'heatMap'].includes(chartType)) && this.props.needSettingPanel
 
     return (
-      <div className={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'} style={{ zIndex: isFullScreen ? 999999999 : 1 }}>
+      <div className={!isFullScreen ? 'chart-container' : 'chart-container-full-screen'}
+           style={{ zIndex: isFullScreen ? 999999999 : 1 }}>
         <OriginChartComponent
           type={chartType}
           chartData={chartData}
@@ -164,22 +175,22 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
         <div className="chart-toolbar">
           {
             !isFullScreen && <div className="fullscreen-btn">
-              <Icon type="fullscreen" theme="outlined" onClick={this.openFullScreenHandler} />
+              <Icon type="fullscreen" theme="outlined" onClick={this.openFullScreenHandler}/>
             </div>
           }
           {
             isFullScreen && <div className="fullscreen-btn">
-              <Icon type="fullscreen-exit" theme="outlined" onClick={this.closeFullScreenHandler} />
+              <Icon type="fullscreen-exit" theme="outlined" onClick={this.closeFullScreenHandler}/>
             </div>
           }
           {
             needSettingPanel && <div className="chart-setting-btn" onClick={this.openSettingPanel}>
-              <Icon type="setting" />
+              <Icon type="setting"/>
             </div>
           }
           {
             this.props.toolbars && (
-              <div className="chart-toolbar-extra">{ this.props.toolbars }</div>
+              <div className="chart-toolbar-extra">{this.props.toolbars}</div>
             )
           }
         </div>
@@ -207,7 +218,7 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
       xColumn,
       yColumn,
       dimColumns,
-      isFullScreen
+      isFullScreen,
     } = this.state
 
     const {
@@ -236,8 +247,8 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
     })
     return (
       <div>
-        { this.renderChartPanel(chartData, false) }
-        {isFullScreen && this.renderChartPanel(chartData, true) }
+        {this.renderChartPanel(chartData, false)}
+        {isFullScreen && this.renderChartPanel(chartData, true)}
       </div>
     )
   }

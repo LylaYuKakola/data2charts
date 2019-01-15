@@ -64,7 +64,9 @@ class MapChart extends React.PureComponent<CommonChartProps, {}> {
   }
 
   fetchPolyline = (area = '中国') => {
-    if (area === '全国') area = '中国'
+    if (area === '全国') {
+      area = '中国'
+    }
     const requestURL = `${MapChart.AMAPAPIURL}?${MapChart.KEY}&${MapChart.CONSTQUERY}&keywords=${encodeURIComponent(area)}`
     return fetch(requestURL).then(res => res.json())
   }

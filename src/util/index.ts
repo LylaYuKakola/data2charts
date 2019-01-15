@@ -20,7 +20,7 @@ export function deepCloneForChartOption(origin: any, current: any) {
   if (isNormalValue(current)) return current
   if (isArray(current) && !isArray(origin)) return [...current]
   if (isArray(current) && isArray(origin)) return [...origin, ...current]
-  if (isObject(current) && !isObject(origin)) return {...current}
+  if (isObject(current) && !isObject(origin)) return { ...current }
   if (isObject(current) && isObject(origin)) {
     Object.keys(current).forEach(key => {
       origin[key] = deepCloneForChartOption(origin[key], current[key])
@@ -30,7 +30,6 @@ export function deepCloneForChartOption(origin: any, current: any) {
 
   return current
 }
-
 
 export function objectFilter(keys: string[] = [], originObj: any = {}) {
   const result = {}

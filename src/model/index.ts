@@ -48,7 +48,7 @@ export function getChartData(chartOption:ChartOptionProps) {
     defaultDimName: '',
     data: [[]],
     xOrY: 'x',
-    ...chartOption
+    ...chartOption,
   }
 
   // 热力图特殊处理
@@ -71,7 +71,7 @@ export function getChartData(chartOption:ChartOptionProps) {
       })
     })
 
-    return { area, legendData, originDataTree, canDrillDown}
+    return { area, legendData, originDataTree, canDrillDown }
   }
 
   // 判断data为空，则直接显示空数据
@@ -81,9 +81,11 @@ export function getChartData(chartOption:ChartOptionProps) {
 
   // 构建data的索引
   if (data[0].length === 1) {
-    if (xColumn === 0) yColumn = -1
-    else if (yColumn === 0) xColumn = -1
-    else {
+    if (xColumn === 0) {
+      yColumn = -1
+    } else if (yColumn === 0) {
+      xColumn = -1
+    } else {
       yColumn = 0
       xColumn = -1
     }
@@ -133,20 +135,20 @@ export function getChartData(chartOption:ChartOptionProps) {
     let keyInRow = ''
     let valueInRow
     if (xOrY === 'x') {
-      keyInRow = xColumnValue + dimColumns.map(_val => row[_val] || '').join('')
+      keyInRow = xColumnValue + dimColumns.map(val => row[val] || '').join('')
       valueInRow = Number(yColumnValue) || 0
       dataMap.set(keyInRow, valueInRow + (dataMap.get(keyInRow) || 0))
       baseLineArr.add(xColumnValue)
     } else {
-      keyInRow = yColumnValue + dimColumns.map(_val => row[_val] || '').join('')
+      keyInRow = yColumnValue + dimColumns.map(val => row[val] || '').join('')
       valueInRow = Number(xColumnValue) || 0
       dataMap.set(keyInRow, valueInRow + (dataMap.get(keyInRow) || 0))
       baseLineArr.add(yColumnValue)
     }
     // 顺便构造维度数组
-    dimColumns.forEach((_val, _index) => {
-      if (!dimValues[_index]) dimValues[_index] = new Set()
-      dimValues[_index].add(row[_val])
+    dimColumns.forEach((val, index) => {
+      if (!dimValues[index]) dimValues[index] = new Set()
+      dimValues[index].add(row[val])
     })
   })
 
@@ -194,7 +196,7 @@ export function getChartData(chartOption:ChartOptionProps) {
   }
 
   if (chartType === 'pie') {
-    return { legendData: baseLineArr, sourceData }
+    return { sourceData, legendData: baseLineArr }
   }
 
   if (chartType === 'line') {

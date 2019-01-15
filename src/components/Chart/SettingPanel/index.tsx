@@ -4,7 +4,7 @@ import './index.scss'
 import { DraggableAreasGroup } from 'react-draggable-tags'
 import { Icon, Select } from 'antd'
 import 'antd/lib/select/style/css'
-import {any} from 'prop-types'
+import { any } from 'prop-types'
 
 const group = new DraggableAreasGroup()
 const DraggableArea1 = group.addArea()
@@ -30,7 +30,7 @@ interface SettingPanelProps {
   xColumn: number,
   yColumn: number,
   dimColumns: number[],
-  onClose: (result:any)=>void,
+  onClose: (result:any) => void,
 }
 
 class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
@@ -40,7 +40,7 @@ class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
   }
 
   result: any
-  addTagToOtherTagCell: (tag:any)=>{}
+  addTagToOtherTagCell: (tag:any) => {}
   settingMask: any
 
   state = {
@@ -126,7 +126,7 @@ class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
     const { allTags, chartType } = newProps
     let { xOrY, xColumn, yColumn, dimColumns } = newProps || this.props
     const [xTags, yTags, dimColumnsTags, otherTags] = [
-      Array(), Array(), Array(), Array()
+      Array(), Array(), Array(), Array(),
     ]
 
     xOrY = xOrY || 'x'
@@ -135,9 +135,11 @@ class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
       yColumn = null
       dimColumns = []
     } else if (allTags.length === 1) {
-      if (xColumn === 0) yColumn = null
-      else if (yColumn === 0) xColumn = null
-      else {
+      if (xColumn === 0) {
+        yColumn = null
+      } else if (yColumn === 0) {
+        xColumn = null
+      } else {
         yColumn = 0
         xColumn = null
       }
@@ -149,7 +151,7 @@ class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
       if (!yColumn && yColumn !== 0) {
         yColumn = xOrY !== 'x' ? 0 : allTags.length - 1
       }
-      dimColumns = (!dimColumns || !(dimColumns instanceof Array)) ? [] : dimColumns
+      dimColumns = (!dimColumns) ? [] : dimColumns
     }
 
     allTags.forEach(tag => {
@@ -295,4 +297,3 @@ class SettingPanel extends React.PureComponent<SettingPanelProps, {}> {
 }
 
 export default SettingPanel
-

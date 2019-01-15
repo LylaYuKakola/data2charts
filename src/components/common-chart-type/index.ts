@@ -1,4 +1,4 @@
-interface chartData {
+interface ChartData {
   title: string,
   legendData: any[],
   baseAxisData: any[],
@@ -16,7 +16,7 @@ interface chartData {
 }
 
 export interface CommonChartProps {
-  data: chartData,
+  data: ChartData,
   extraChartOption?: {},
   theme?: {}
 }

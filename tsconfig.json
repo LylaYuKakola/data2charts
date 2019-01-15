@@ -33,12 +33,19 @@
       "coverage/lcov-report/*.js"
     ]
   },
+  "allowSyntheticDefaultImports": true,
   "rules": {
     "arrow-parens": false,
     "ter-arrow-parens": false,
     "semicolon": [
       true,
       "never"
-    ]
+    ],
+    "prefer-const": false,
+    "max-line-length": false,
+    "no-increment-decrement": false,
+    "no-parameter-reassignment": false,
+    "variable-name": false,
+    "import-name": false
   }
 }
