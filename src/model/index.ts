@@ -228,9 +228,7 @@ export function getChartData(chartOption:ChartOptionProps) {
         mapForSort.push([baseLineArr[index], val])
       })
       sourceData[0].data = []
-      mapForSort.sort((prev, current) => {
-        return prev[1] > current[1] ? -1 : 1
-      }).forEach(val => {
+      mapForSort.forEach(val => {
         baseAxisData.push(val[0])
         sourceData[0].data.push(val[1])
       })
