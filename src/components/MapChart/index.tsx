@@ -55,8 +55,10 @@ class MapChart extends React.PureComponent<CommonChartProps, {}> {
 
   componentWillUnmount() {
     window.removeEventListener('resize', () => this.handleResize())
-    this.chartInstance.dispose()
-    this.chartInstance = null
+    if (this.chartInstance) {
+      this.chartInstance.dispose()
+      this.chartInstance = null
+    }
   }
 
   handleResize() {

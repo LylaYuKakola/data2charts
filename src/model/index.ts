@@ -61,6 +61,7 @@ export function getChartData(chartOption:ChartOptionProps) {
     data.forEach(row => {
       let currentObject = originDataTree
       const rowLength = row.length
+      row[rowLength - 1] = Number(row[rowLength - 1]) || 0
       row.forEach((val, index) => {
         if (rowLength === (index + 1)) {
           currentObject.value = `**|${val}|**`
@@ -70,6 +71,7 @@ export function getChartData(chartOption:ChartOptionProps) {
         currentObject = currentObject[val]
       })
     })
+    debugger
 
     return { area, legendData, originDataTree, canDrillDown }
   }
@@ -136,8 +138,16 @@ export function getChartData(chartOption:ChartOptionProps) {
     let valueInRow
     if (xOrY === 'x') {
       keyInRow = xColumnValue + dimColumns.map(val => row[val] || '').join('')
-      valueInRow = Number(yColumnValue) || 0
-      dataMap.set(keyInRow, valueInRow + (dataMap.get(keyInRow) || 0))
+      valueInRow = Number(yColumnValue)
+      if (Number.isNaN(valueInRow)) {
+        if (dataMap.get(keyInRow)) {
+          dataMap.set(keyInRow, 0 + (dataMap.get(keyInRow) || 0))
+        } else {
+          dataMap.set(keyInRow, yColumnValue)
+        }
+      } else {
+        dataMap.set(keyInRow, valueInRow + (dataMap.get(keyInRow) || 0))
+      }
       baseLineArr.add(xColumnValue)
     } else {
       keyInRow = yColumnValue + dimColumns.map(val => row[val] || '').join('')
@@ -203,6 +213,7 @@ export function getChartData(chartOption:ChartOptionProps) {
     const legendData = dims
     const baseAxisData = baseLineArr
 
+    const a = '#23badd'
     // 是否为特殊的y轴
     if (specialScaleArr) {
       const valueAxisData = specialScaleArr

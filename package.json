@@ -1,6 +1,6 @@
 {
   "name": "data2charts",
-  "version": "0.3.2",
+  "version": "0.3.2-dev-3",
   "description": "二维数组数据转换echarts的react组件",
   "main": "lib/index.js",
   "license": "MIT",

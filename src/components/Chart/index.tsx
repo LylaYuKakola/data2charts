@@ -73,7 +73,7 @@ export default class Chart extends React.PureComponent <ChartProps, {}> {
     }))
 
     // 初始化 xColumn、yColumn、dimColumns
-    if (xOrY = 'x') {
+    if (xOrY === 'x') {
       xColumn = xColumn || 0
       yColumn = yColumn || npmOfDataColumn - 1
     } else {

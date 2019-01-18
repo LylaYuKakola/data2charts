@@ -13,14 +13,14 @@ class Main extends React.PureComponent{
 
   static getRandomData() {
     return [
-      ['2012', '型号001', '渠道1', Math.random() * 10],
-      ['2013', '型号001', '渠道1', Math.random() * 10],
+      ['2012', '型号001', '渠道1', String(Math.random() * 10)],
+      ['2013', '型号001', '渠道1', '-'],
       ['2014', '型号001', '渠道1', Math.random() * 10],
       ['2015', '型号001', '渠道1', -Math.random() * 10],
       ['2016', '型号001', '渠道1', Math.random() * 10],
       ['2017', '型号001', '渠道1', Math.random() * 10],
       ['2018', '型号001', '渠道1', Math.random() * 10],
-      ['2019', '型号001', '渠道1', 0],
+      ['2019', '型号001', '渠道1', '-'],
       ['2020', '型号001', '渠道1', 0],
       ['2012', '型号002', '渠道1', Math.random() * 10],
       ['2013', '型号002', '渠道1', Math.random() * 10],
@@ -62,6 +62,12 @@ class Main extends React.PureComponent{
     ['湖北省', '武汉市', 2500],
   ]
 
+  static dataForBar = [
+    ['北京市', 1000],
+    ['天津市', 3000],
+    ['河北省', '沧州市', 500],
+  ]
+
   render() {
     return (
       <div>
@@ -74,6 +80,12 @@ class Main extends React.PureComponent{
           chartType="heatMap"
           data={Main.dataForHeatMap}
           canDrillDown={true}
+        />
+        <Chart
+          chartType="bar"
+          data={Main.getRandomData()}
+          needSettingPanel={true}
+          xOrY="y"
         />
       </div>
     )
